@@ -1,0 +1,4 @@
+node_modules/
+Cache/*
+Build/*
+*.bat
