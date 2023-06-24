@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>R3 Water Sample Puzzle - Please wait...</title>
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="shortcut icon" type="image/png" href="img/icon.png" sizes="389x339"/>
+	</head>
+	<body>
+
+		<!-- Main Canvas -->
+		<div class="APP_CANVAS" id="APP_CANVAS">
+
+			<!-- Top buttons -->
+			<div class="DIV_BTNS" id="DIV_BTNS">
+				<input type="button" class="BTN_TOP" onclick="APP.puzzle.getRandomPuzzle(!0, !0);"value="Get Another Puzzle">
+				<input type="button" class="BTN_TOP" onclick="APP.about();" value="About">
+			</div>
+
+			<!-- Labels -->
+			<div class="DIV_LABELS">
+				Sample ID: <span id="LABEL_currentSample">0</span><br>
+				Score: <span id="LABEL_playerScore">0</span><br>
+				Resets: <span id="LABEL_resetSample">0</span>
+			</div>
+
+			<!-- Sample -->
+			<div class="DIV_SAMPLE_PATTERN_LABEL LABEL_SAMPLE">
+				Sample
+			</div>
+			<div class="ROW_BASE ROW_SAMPLE">
+
+				<!-- Markers -->
+				<div class="ROW_MARKER">
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+				</div>
+				<div class="ROW_MARKER">
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+				</div>
+				<div class="ROW_MARKER">
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+				</div>
+				<div class="ROW_MARKER">
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+				</div>
+				<div class="ROW_MARKER">
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+				</div>
+				<div class="ROW_MARKER">
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+				</div>
+				<div class="ROW_MARKER">
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+				</div>
+				<div class="ROW_MARKER">
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+				</div>
+				<div class="ROW_MARKER">
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+				</div>
+
+				<div class="ROW_MARKER_LINE_BOTTOM"></div>
+
+				<!-- Line status -->
+				<div class="LINE_STATUS_HOLDER">
+					<div class="LINE_STATUS" id="ROW_SAMPLE_BAR_0"></div>
+					<div class="LINE_STATUS" id="ROW_SAMPLE_BAR_1"></div>
+					<div class="LINE_STATUS" id="ROW_SAMPLE_BAR_2"></div>
+					<div class="LINE_STATUS" id="ROW_SAMPLE_BAR_3"></div>
+					<div class="LINE_STATUS" id="ROW_SAMPLE_BAR_4"></div>
+					<div class="LINE_STATUS" id="ROW_SAMPLE_BAR_5"></div>
+					<div class="LINE_STATUS" id="ROW_SAMPLE_BAR_6"></div>
+					<div class="LINE_STATUS" id="ROW_SAMPLE_BAR_7"></div>
+					<div class="LINE_STATUS" id="ROW_SAMPLE_BAR_8"></div>
+					<div class="LINE_STATUS" id="ROW_SAMPLE_BAR_9"></div>
+					<div class="LINE_STATUS" id="ROW_SAMPLE_BAR_10"></div>
+					<div class="LINE_STATUS" id="ROW_SAMPLE_BAR_11"></div>
+					<div class="LINE_STATUS" id="ROW_SAMPLE_BAR_12"></div>
+					<div class="LINE_STATUS" id="ROW_SAMPLE_BAR_13"></div>
+					<div class="LINE_STATUS" id="ROW_SAMPLE_BAR_14"></div>
+					<div class="LINE_STATUS" id="ROW_SAMPLE_BAR_15"></div>
+				</div>
+
+			</div>
+
+			<!-- Line A -->
+			<div class="ROW_PUZZLE ROW_PUZZLE_A">
+				<div class="ROW_ACTIVE_ICON" id="ROW_ACTIVE_ICON_A"></div>
+				<div class="ROW_PUZZLE_LABEL">A</div>
+				
+				<div class="DIV_PUZZLE_BUTTONS">
+
+					<!-- Buttons -->
+					<input type="button" value="<" class="BTN_PUZZLE BTN_PUZZLE_LEFT" onclick="APP.puzzle.updateRow('A', 'left');">
+					<input type="button" value=">" class="BTN_PUZZLE BTN_PUZZLE_RIGHT" onclick="APP.puzzle.updateRow('A', 'right');">
+				
+					<!-- Preview -->
+					<div class="DIV_LINE_PREVIEW">
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER_LINE_BOTTOM ROW_MARKER_LINE_BOTTOM_SMALL"></div>
+
+						<div class="LINE_STATUS_HOLDER LINE_STATUS_HOLDER_SMALL">
+							<div class="LINE_STATUS LINE_STATUS_A" id="ROW_LINE_A_BAR_0"></div>
+							<div class="LINE_STATUS LINE_STATUS_A" id="ROW_LINE_A_BAR_1"></div>
+							<div class="LINE_STATUS LINE_STATUS_A" id="ROW_LINE_A_BAR_2"></div>
+							<div class="LINE_STATUS LINE_STATUS_A" id="ROW_LINE_A_BAR_3"></div>
+							<div class="LINE_STATUS LINE_STATUS_A" id="ROW_LINE_A_BAR_4"></div>
+							<div class="LINE_STATUS LINE_STATUS_A" id="ROW_LINE_A_BAR_5"></div>
+							<div class="LINE_STATUS LINE_STATUS_A" id="ROW_LINE_A_BAR_6"></div>
+							<div class="LINE_STATUS LINE_STATUS_A" id="ROW_LINE_A_BAR_7"></div>
+							<div class="LINE_STATUS LINE_STATUS_A" id="ROW_LINE_A_BAR_8"></div>
+							<div class="LINE_STATUS LINE_STATUS_A" id="ROW_LINE_A_BAR_9"></div>
+							<div class="LINE_STATUS LINE_STATUS_A" id="ROW_LINE_A_BAR_10"></div>
+							<div class="LINE_STATUS LINE_STATUS_A" id="ROW_LINE_A_BAR_11"></div>
+							<div class="LINE_STATUS LINE_STATUS_A" id="ROW_LINE_A_BAR_12"></div>
+							<div class="LINE_STATUS LINE_STATUS_A" id="ROW_LINE_A_BAR_13"></div>
+							<div class="LINE_STATUS LINE_STATUS_A" id="ROW_LINE_A_BAR_14"></div>
+							<div class="LINE_STATUS LINE_STATUS_A" id="ROW_LINE_A_BAR_15"></div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<!-- Line B -->
+			<div class="ROW_PUZZLE ROW_PUZZLE_B">
+				<div class="ROW_ACTIVE_ICON" id="ROW_ACTIVE_ICON_B"></div>
+				<div class="ROW_PUZZLE_LABEL">B</div>
+				
+				<div class="DIV_PUZZLE_BUTTONS">
+
+					<!-- Buttons -->
+					<input type="button" value="<" class="BTN_PUZZLE BTN_PUZZLE_LEFT" onclick="APP.puzzle.updateRow('B', 'left');">
+					<input type="button" value=">" class="BTN_PUZZLE BTN_PUZZLE_RIGHT" onclick="APP.puzzle.updateRow('B', 'right');">
+				
+					<!-- Preview -->
+					<div class="DIV_LINE_PREVIEW">
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER_LINE_BOTTOM ROW_MARKER_LINE_BOTTOM_SMALL"></div>
+
+						<div class="LINE_STATUS_HOLDER LINE_STATUS_HOLDER_SMALL">
+							<div class="LINE_STATUS LINE_STATUS_B" id="ROW_LINE_B_BAR_0"></div>
+							<div class="LINE_STATUS LINE_STATUS_B" id="ROW_LINE_B_BAR_1"></div>
+							<div class="LINE_STATUS LINE_STATUS_B" id="ROW_LINE_B_BAR_2"></div>
+							<div class="LINE_STATUS LINE_STATUS_B" id="ROW_LINE_B_BAR_3"></div>
+							<div class="LINE_STATUS LINE_STATUS_B" id="ROW_LINE_B_BAR_4"></div>
+							<div class="LINE_STATUS LINE_STATUS_B" id="ROW_LINE_B_BAR_5"></div>
+							<div class="LINE_STATUS LINE_STATUS_B" id="ROW_LINE_B_BAR_6"></div>
+							<div class="LINE_STATUS LINE_STATUS_B" id="ROW_LINE_B_BAR_7"></div>
+							<div class="LINE_STATUS LINE_STATUS_B" id="ROW_LINE_B_BAR_8"></div>
+							<div class="LINE_STATUS LINE_STATUS_B" id="ROW_LINE_B_BAR_9"></div>
+							<div class="LINE_STATUS LINE_STATUS_B" id="ROW_LINE_B_BAR_10"></div>
+							<div class="LINE_STATUS LINE_STATUS_B" id="ROW_LINE_B_BAR_11"></div>
+							<div class="LINE_STATUS LINE_STATUS_B" id="ROW_LINE_B_BAR_12"></div>
+							<div class="LINE_STATUS LINE_STATUS_B" id="ROW_LINE_B_BAR_13"></div>
+							<div class="LINE_STATUS LINE_STATUS_B" id="ROW_LINE_B_BAR_14"></div>
+							<div class="LINE_STATUS LINE_STATUS_B" id="ROW_LINE_B_BAR_15"></div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<!-- Line C -->
+			<div class="ROW_PUZZLE ROW_PUZZLE_C">
+				<div class="ROW_ACTIVE_ICON" id="ROW_ACTIVE_ICON_C"></div>
+				<div class="ROW_PUZZLE_LABEL">C</div>
+				
+				<div class="DIV_PUZZLE_BUTTONS">
+
+					<!-- Buttons -->
+					<input type="button" value="<" class="BTN_PUZZLE BTN_PUZZLE_LEFT" onclick="APP.puzzle.updateRow('C', 'left');">
+					<input type="button" value=">" class="BTN_PUZZLE BTN_PUZZLE_RIGHT" onclick="APP.puzzle.updateRow('C', 'right');">
+				
+					<!-- Preview -->
+					<div class="DIV_LINE_PREVIEW">
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER">
+							<div class="ROW_MARKER_LINE ROW_MARKER_LINE_SMALL"></div>
+						</div>
+						<div class="ROW_MARKER_LINE_BOTTOM ROW_MARKER_LINE_BOTTOM_SMALL"></div>
+
+						<div class="LINE_STATUS_HOLDER LINE_STATUS_HOLDER_SMALL">
+							<div class="LINE_STATUS LINE_STATUS_C" id="ROW_LINE_C_BAR_0"></div>
+							<div class="LINE_STATUS LINE_STATUS_C" id="ROW_LINE_C_BAR_1"></div>
+							<div class="LINE_STATUS LINE_STATUS_C" id="ROW_LINE_C_BAR_2"></div>
+							<div class="LINE_STATUS LINE_STATUS_C" id="ROW_LINE_C_BAR_3"></div>
+							<div class="LINE_STATUS LINE_STATUS_C" id="ROW_LINE_C_BAR_4"></div>
+							<div class="LINE_STATUS LINE_STATUS_C" id="ROW_LINE_C_BAR_5"></div>
+							<div class="LINE_STATUS LINE_STATUS_C" id="ROW_LINE_C_BAR_6"></div>
+							<div class="LINE_STATUS LINE_STATUS_C" id="ROW_LINE_C_BAR_7"></div>
+							<div class="LINE_STATUS LINE_STATUS_C" id="ROW_LINE_C_BAR_8"></div>
+							<div class="LINE_STATUS LINE_STATUS_C" id="ROW_LINE_C_BAR_9"></div>
+							<div class="LINE_STATUS LINE_STATUS_C" id="ROW_LINE_C_BAR_10"></div>
+							<div class="LINE_STATUS LINE_STATUS_C" id="ROW_LINE_C_BAR_11"></div>
+							<div class="LINE_STATUS LINE_STATUS_C" id="ROW_LINE_C_BAR_12"></div>
+							<div class="LINE_STATUS LINE_STATUS_C" id="ROW_LINE_C_BAR_13"></div>
+							<div class="LINE_STATUS LINE_STATUS_C" id="ROW_LINE_C_BAR_14"></div>
+							<div class="LINE_STATUS LINE_STATUS_C" id="ROW_LINE_C_BAR_15"></div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<!-- Result -->
+			<div class="DIV_SAMPLE_PATTERN_LABEL LABEL_RESULT">
+				Result
+			</div>
+			<div class="ROW_BASE ROW_RESULT">
+
+				<!-- Markers -->
+				<div class="ROW_MARKER">
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+				</div>
+				<div class="ROW_MARKER">
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+				</div>
+				<div class="ROW_MARKER">
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+				</div>
+				<div class="ROW_MARKER">
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+				</div>
+				<div class="ROW_MARKER">
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+				</div>
+				<div class="ROW_MARKER">
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+				</div>
+				<div class="ROW_MARKER">
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+				</div>
+				<div class="ROW_MARKER">
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+				</div>
+				<div class="ROW_MARKER">
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+					<div class="ROW_MARKER_LINE"></div>
+				</div>
+
+				<div class="ROW_MARKER_LINE_BOTTOM"></div>
+
+				<!-- Line status -->
+				<div class="LINE_STATUS_HOLDER">
+					<div class="LINE_STATUS" id="ROW_RESULT_BAR_0"></div>
+					<div class="LINE_STATUS" id="ROW_RESULT_BAR_1"></div>
+					<div class="LINE_STATUS" id="ROW_RESULT_BAR_2"></div>
+					<div class="LINE_STATUS" id="ROW_RESULT_BAR_3"></div>
+					<div class="LINE_STATUS" id="ROW_RESULT_BAR_4"></div>
+					<div class="LINE_STATUS" id="ROW_RESULT_BAR_5"></div>
+					<div class="LINE_STATUS" id="ROW_RESULT_BAR_6"></div>
+					<div class="LINE_STATUS" id="ROW_RESULT_BAR_7"></div>
+					<div class="LINE_STATUS" id="ROW_RESULT_BAR_8"></div>
+					<div class="LINE_STATUS" id="ROW_RESULT_BAR_9"></div>
+					<div class="LINE_STATUS" id="ROW_RESULT_BAR_10"></div>
+					<div class="LINE_STATUS" id="ROW_RESULT_BAR_11"></div>
+					<div class="LINE_STATUS" id="ROW_RESULT_BAR_12"></div>
+					<div class="LINE_STATUS" id="ROW_RESULT_BAR_13"></div>
+					<div class="LINE_STATUS" id="ROW_RESULT_BAR_14"></div>
+					<div class="LINE_STATUS" id="ROW_RESULT_BAR_15"></div>
+				</div>
+
+			</div>
+
+		</div>
+
+		<!-- App script work area -->
+		<div class="none" id="APP_SCRIPT_AREA"></div>
+
+		<!-- Required modules -->
+		<div class="none" id="APP_SCRIPT_LIST">
+			
+			<!-- TMS.js -->
+			<script type="text/javascript" src="js/TMS.js"></script>
+
+			<!-- Main module -->
+			<script type="module" src="js/init.js"></script>
+
+		</div>
+
+	</body>
+</html>

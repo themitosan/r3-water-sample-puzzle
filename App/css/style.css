@@ -1,0 +1,273 @@
+/*
+	styles.css
+*/
+body {
+	color: #fff;
+	overflow: hidden;
+	user-select: none;
+	font-family: monospace;
+	background-color: #000;
+	background-repeat: repeat;
+	background-size: auto 610%;
+	background-position: center;
+	text-shadow: 1px 1px 0px #0004;
+	background-image: url('../img/icon.webp');
+}
+span {
+	left: 366px;
+	position: sticky;
+}
+
+/*
+	Canvas divs
+*/
+.APP_CANVAS {
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	z-index: 10;
+	height: 100%;
+	position: absolute;
+	background-color: #002a;
+	backdrop-filter: blur(2px);
+}
+
+/*
+	General GUI
+*/
+.BTN_TOP {
+	border: none;
+	outline: none;
+	cursor: pointer;
+	margin-left: 4px;
+	margin-right: 4px;
+	border-radius: 4px;
+	font-family: monospace;
+	background-image: linear-gradient(180deg, #eee, #ccc);
+}
+.BTN_TOP:active {
+	color: #888;
+	filter: blur(1px);
+	box-shadow: 0px 0px 4px #000 inset;
+	background-image: linear-gradient(0deg, #eee, #ccc);	
+}
+.DIV_LABELS {
+	right: 10px;
+	width: 110px;
+	height: 48px;
+	padding: 6px;
+	position: absolute;
+	border-radius: 6px;
+	top: calc(50% - 24px);
+	background-color: #6664;
+	backdrop-filter: blur(2px);
+}
+.DIV_BTNS {
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 0px;
+	display: flex;
+	overflow: hidden;
+	filter: blur(14px);
+	position: absolute;
+	align-items: center;
+	justify-content: center;
+	transition-duration: 2s;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	transition-timing-function: cubic-bezier(0,1,0,1);
+	background-image: linear-gradient(180deg, #666, #333);
+}
+.DIV_SAMPLE_PATTERN_LABEL {
+    color: #fff;
+    width: 178px;
+    padding: 2px;
+    position: absolute;
+    text-align: center;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    background-image: linear-gradient(180deg, #888, #666);
+}
+.LABEL_SAMPLE {
+	top: 41px;
+	left: 68px;
+}
+.LABEL_RESULT {
+	top: 204px;
+	left: 68px;
+}
+.ROW_PUZZLE {
+	padding: 2px;
+	left: 10px;
+	width: 236px;
+	position: absolute;
+	border-radius: 4px;
+	background-color: #666;
+}
+.ROW_PUZZLE_A {
+	top: 110px;
+}
+.ROW_PUZZLE_B {
+	top: 140px;
+}
+.ROW_PUZZLE_C {
+	top: 170px;
+}
+.ROW_PUZZLE_LABEL {
+	width: 12px;
+	text-align: center;
+}
+
+/*
+	Puzzle elements
+*/
+.ROW_BASE {
+	width: 178px;
+	height: 34px;
+	z-index: 100;
+	overflow: hidden;
+	border-width: 2px;
+	border-color: #666;
+	position: absolute;
+	border-style: solid;
+	display: -webkit-box;
+	background-color: #000;
+	border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
+}
+.ROW_SAMPLE {
+	top: 60px;
+	left: 68px;
+}
+.ROW_RESULT {
+	top: 223px;
+	left: 68px;
+}
+.ROW_MARKER {
+	width: 2px;
+	z-index: 20;
+	height: 100%;
+	opacity: 0.8;
+	position: relative;
+	background-color: #0f0;
+	margin: 0px 20px 0px 0px;
+	box-shadow: 1px 1px 0px #0a08;
+}
+.ROW_MARKER_LINE {
+	width: 10px;
+	height: 1px;
+	margin-left: -4px;
+	margin-bottom: 8.7px;
+	background-color: #0f0;
+}
+.ROW_MARKER_LINE_SMALL {
+    top: 8px;
+    position: absolute;
+}
+.ROW_MARKER_LINE_BOTTOM {
+	width: 100%;
+	height: 1px;
+	bottom: 4px;
+	z-index: 20;
+	opacity: 0.4;
+	position: absolute;
+	filter: blur(0.4px);
+	background-color: #0f0;
+}
+.ROW_MARKER_LINE_BOTTOM_SMALL {
+	bottom: 2px;
+}
+.LINE_STATUS_HOLDER {
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	display: flex;
+	position: absolute;
+	align-items: flex-end;
+	height: calc(100% - 4px);
+	justify-content: flex-start;
+}
+.LINE_STATUS {
+	width: 12px;
+	height: 0px;
+	z-index: 10;
+	height: 0px;
+	margin-right: 0px;
+	background-color: #fff;
+	transition-duration: 1.2s;
+	transition-timing-function: cubic-bezier(0,1,0,1);
+}
+.LINE_STATUS_A {
+	background-color: #ff8784;
+	transition-duration: 0s;
+}
+.LINE_STATUS_B {
+	background-color: #ffffb2;
+	transition-duration: 0s;
+}
+.LINE_STATUS_C {
+	background-color: #1affff;
+	transition-duration: 0s;
+}
+.LINE_STATUS_HOLDER_SMALL {
+	height: calc(100% - 3px);
+}
+.ROW_ACTIVE_ICON {
+	width: 4px;
+	height: 4px;
+	border-radius: 10px;
+	background-color: #000;
+	background-image: none;
+	box-shadow: 0px 0px 4px #222 inset;
+}
+.ROW_ACTIVE_ICON_ON {
+	box-shadow: none;
+	background-image: linear-gradient(180deg, #0c0, #080);
+}
+.BTN_PUZZLE {
+	height: 16px;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	background-image: linear-gradient(180deg, #fff, #bbb);
+}
+.BTN_PUZZLE:active {
+	color: #888;
+	box-shadow: 0px 0px 6px #0006 inset;
+	background-image: linear-gradient(0deg, #fff, #bbb);	
+}
+.BTN_PUZZLE_LEFT {
+	margin-right: -3.5px;
+	border-top-left-radius: 4px;
+	border-bottom-left-radius: 4px;
+}
+.BTN_PUZZLE_RIGHT {
+	margin-left: -3.5px;
+	border-top-right-radius: 4px;
+	border-bottom-right-radius: 4px;
+}
+.DIV_PUZZLE_BUTTONS {
+	top: 6px;
+	left: 16px;
+	position: absolute;
+	width: calc(100% - 18px);
+}
+.DIV_LINE_PREVIEW {
+	top: -3px;
+	right: 0px;
+	height: 18px;
+	width: 178px;
+	overflow: hidden;
+	position: absolute;
+	border-radius: 2px;
+	display: -webkit-box;
+	background-color: #000;
+}
+
+/*
+	Misc
+*/
+.none {
+	display: none !important;
+}
