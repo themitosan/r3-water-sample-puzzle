@@ -6,6 +6,9 @@
 // Get compiler
 var COMPILER = require('./compile.js');
 
+// Set folders to be transfered
+COMPILER.copyFolders = ['img'];
+
 // Set JS data
 COMPILER.jsScriptsBeforeMain = ['systemjs.js', 'named-register.min.js'];
 COMPILER.mainJsFile = 'app.js';

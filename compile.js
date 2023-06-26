@@ -5,6 +5,8 @@
 	This script was based on another top-secret-project™ from TheMitoSan.
 */
 
+const { mkdir } = require('fs');
+
 module.exports = {
 
 	/*
@@ -14,6 +16,9 @@ module.exports = {
 	// NW.js variables
 	nwFlavor: void 0,
 	nwVersion: void 0,
+
+	// Folder options
+	copyFolders: [],
 
 	// JS variables
 	mainJsFile: void 0,
@@ -38,26 +43,40 @@ module.exports = {
 	packageJson: require('./package.json'),
 
 	// Require modules
+	fs: require('fs'),
+	util: require('util'),
 	cleanCss: require('clean-css'),
 	uglifyJs: require('uglify-js'),
 	nwBuilder: require('nw-builder'),
 	htmlMinify: require('html-minifier').minify,
 
+	/*
+		Step processor
+	*/
+
 	// Start compiler
 	run: async function(){
 
 		// Get main data
-		var buildHash = '',
+		var fs = this.fs,
+			buildHash = '',
 			date = new Date,
-			fs = require('fs'),
 			uglify = this.uglifyJs,
 			mainJsFile = this.mainJsFile,
 			packageJson = this.packageJson,
 			jsScriptsBeforeMain = this.jsScriptsBeforeMain;
-		
+
+		/*
+			Enhance fs
+		*/
+		const wFileSync = this.util.promisify(fs.writeFile),
+			mkDir = this.util.promisify(fs.mkdir),
+			copyFolder = this.util.promisify(fs.cp),
+			rmDir = this.util.promisify(fs.rm);
+
 		// Check if hash.inc exists
 		if (fs.existsSync('./hash.inc') !== !0){
-			fs.writeFileSync('./hash.inc', '', 'utf8');
+			await wFileSync('./hash.inc', '', 'utf8');
 		}
 		buildHash = fs.readFileSync('./hash.inc', 'utf8');
 
@@ -66,21 +85,29 @@ module.exports = {
 		*/
 
 		// Check if tempApp folder exists
-		if (fs.existsSync('./tempApp') !== !0){
-			await fs.mkdirSync('./tempApp');
+		if (fs.existsSync('./tempApp') === !0){
+			console.info('INFO - Removing previous temp folder...');
+			await rmDir('./tempApp', { force: !0, recursive: !0 });
 		}
+		await mkDir('./tempApp');
 
-		// Copy img dir
-		await fs.cp('./App/img', './tempApp/img', { recursive: !0, force: !0 }, function(err){
-			if (err) { console.error(err); }
+		// Copy folders
+		this.copyFolders.forEach(async function(cFolder){
+			
+			// Check if folder exists
+			if (fs.existsSync(`./App/${cFolder}`) === !0){
+
+				console.info(`INFO - Copying folder "${cFolder}" to temp path...`);
+
+				await copyFolder(`./App/${cFolder}`, `./tempApp/${cFolder}`, { recursive: !0, force: !0 }, function(err){
+					if (err) { console.error(err); }
+				});
+
+			} else {
+				console.warn(`WARN - Unable to find "${cFolder}" on project (./App) files!`);
+			}
+
 		});
-
-		// Check if node_modules dir exists
-		if (fs.existsSync('./App/node_modules') === !0){
-			await fs.cp('./App/node_modules', './tempApp/node_modules', { recursive: !0, force: !0 }, function(err){
-				if (err) { console.error(err); }
-			});
-		}
 
 		/*
 			Update package.json
@@ -101,8 +128,8 @@ module.exports = {
 		packageJson.window.icon = 'img/icon.png';
 
 		// Update package.json and remove inc file
-		await fs.writeFileSync('./tempApp/package.json', JSON.stringify(packageJson), 'utf8');
-		await fs.unlinkSync('hash.inc');
+		fs.writeFileSync('./tempApp/package.json', JSON.stringify(packageJson), 'utf8');
+		fs.unlinkSync('hash.inc');
 
 		/*
 			Minify files
@@ -150,14 +177,14 @@ module.exports = {
 		mainHtmlFile = this.htmlMinify(mainHtmlFile, this.htmlMinifyOptions);
 
 		// Write new index file
-		await fs.writeFileSync('./tempApp/index.htm', mainHtmlFile, 'utf8');
+		fs.writeFileSync('./tempApp/index.htm', mainHtmlFile, 'utf8');
 
 		/*
 			Setup nw-builder
 		*/
 
 		// Log data before builder setup
-		console.info(`INFO - Running compiler\n\nVersion: ${this.nwVersion}\nFlavor: ${this.nwFlavor}`);
+		console.info(`INFO - Running nw-builder\nVersion: ${this.nwVersion}\nFlavor: ${this.nwFlavor}`);
 
 		// Setup nw-builder
 		const compileData = new this.nwBuilder({
@@ -180,7 +207,7 @@ module.exports = {
 			version: nwVersion,
 
 			// Windows settings
-			winIco: './App/img/icon.ico',
+			winIco: './tempApp/img/icon.ico',
 			winVersionString: {
 				'CompanyName': packageJson.author,
 				'ProductName': packageJson.appName,
@@ -204,9 +231,6 @@ module.exports = {
 				// Copy required files to build dir
 				fs.writeFileSync('./version.txt', `Version: ${packageJson.version}`, 'utf8');
 				fs.writeFileSync(`./build/${packageJson.name}/win64/version.txt`, `Version: ${packageJson.version}`, 'utf8');
-
-				// Remove tempApp dir
-				fs.rmSync('./tempApp', { force: !0, recursive: !0 });
 
 			});
 
