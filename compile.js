@@ -44,10 +44,7 @@ module.exports = {
 	htmlMinify: require('html-minifier').minify,
 
 	// Start compiler
-	run: function(){
-
-		// Clear previous console data
-		console.clear();
+	run: async function(){
 
 		// Get main data
 		var buildHash = '',
@@ -70,17 +67,17 @@ module.exports = {
 
 		// Check if tempApp folder exists
 		if (fs.existsSync('./tempApp') !== !0){
-			fs.mkdirSync('./tempApp');
+			await fs.mkdirSync('./tempApp');
 		}
 
 		// Copy img dir
-		fs.cp('./App/img', './tempApp/img', { recursive: !0, force: !0 }, function(err){
+		await fs.cp('./App/img', './tempApp/img', { recursive: !0, force: !0 }, function(err){
 			if (err) { console.error(err); }
 		});
 
 		// Check if node_modules dir exists
 		if (fs.existsSync('./App/node_modules') === !0){
-			fs.cp('./App/node_modules', './tempApp/node_modules', { recursive: !0, force: !0 }, function(err){
+			await fs.cp('./App/node_modules', './tempApp/node_modules', { recursive: !0, force: !0 }, function(err){
 				if (err) { console.error(err); }
 			});
 		}
@@ -104,8 +101,8 @@ module.exports = {
 		packageJson.window.icon = 'img/icon.png';
 
 		// Update package.json and remove inc file
-		fs.writeFileSync('./tempApp/package.json', JSON.stringify(packageJson), 'utf8');
-		fs.unlinkSync('hash.inc');
+		await fs.writeFileSync('./tempApp/package.json', JSON.stringify(packageJson), 'utf8');
+		await fs.unlinkSync('hash.inc');
 
 		/*
 			Minify files
@@ -153,7 +150,7 @@ module.exports = {
 		mainHtmlFile = this.htmlMinify(mainHtmlFile, this.htmlMinifyOptions);
 
 		// Write new index file
-		fs.writeFileSync('./tempApp/index.htm', mainHtmlFile, 'utf8');
+		await fs.writeFileSync('./tempApp/index.htm', mainHtmlFile, 'utf8');
 
 		/*
 			Setup nw-builder
@@ -200,7 +197,6 @@ module.exports = {
 
 			// Create new hash file
 			fs.writeFileSync('hash.inc', '', 'utf8');
-
 			
 			// Run nw-builder
 			compileData.build().then(function(){
@@ -213,7 +209,6 @@ module.exports = {
 				fs.rmSync('./tempApp', { force: !0, recursive: !0 });
 
 			});
-			
 
 		} catch (err) {
 
