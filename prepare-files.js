@@ -1,6 +1,6 @@
 /*
 	R3 Water Sample Puzzle
-	compile.js
+	prepare-files.js
 
 	This script was based on another top-secret-project™ from TheMitoSan.
 */
@@ -52,9 +52,7 @@ module.exports = {
 	*/
 
 	// Start compiler
-	prepareFiles: async function(cb){
-
-		console.clear();
+	prepareFiles: async function(){
 
 		// Get main data
 		var fs = this.fs,

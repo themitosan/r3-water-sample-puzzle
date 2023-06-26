@@ -6,7 +6,7 @@
     "license": "GPL-2.0-only",
     "name": "r3-water-sample-puzzle",
     "appName": "R3 Water Sample Puzzle",
-    "description": "This is a nw version of water sample - a puzzle from a classic survivor horror game, created using TMS.js and TS",
+    "description": "This is a nw version of water sample - a classic puzzle from a survivor horror game, created using TMS.js and TS",
     "window": {
         "width": 390,
         "height": 280,
@@ -26,7 +26,8 @@
     "scripts": {
         "dev": "nw",
         "compileTs": "tsc",
-        "build": "node comp-main.js",
+        "prepFiles": "node prepFiles.js",
+        "build-main": "node comp-main.js",
         "build-debug": "node comp-debug.js"
     },
     "dependencies": {

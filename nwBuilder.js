@@ -1,6 +1,6 @@
 /*
 	R3 Water Sample Puzzle
-	startNwBuilder.js
+	nwBuilder.js
 
 	This script was based on another top-secret-project™ from TheMitoSan.
 */
@@ -51,8 +51,8 @@ module.exports = {
 			files: './tempApp/**/*',
 
 			// Set flavor and version
-			flavor: nwFlavor,
-			version: nwVersion,
+			flavor: this.nwFlavor,
+			version: this.nwVersion,
 
 			// Windows settings
 			winIco: './tempApp/img/icon.ico',
@@ -62,7 +62,7 @@ module.exports = {
 				'ProductShortName': pJson.name,
 				'CompanyShortName': pJson.author,
 				'FileDescription': pJson.description,
-				'FileVersion': `Ver. ${pJson.version}, nwjs: ${nwVersion}`,
+				'FileVersion': `Ver. ${pJson.version}, nwjs: ${this.nwVersion}`,
 				'LegalCopyright': `2023, ${date.getFullYear()} - ${pJson.author}`
 			}
 

@@ -1,24 +1,16 @@
 /*
 	R3 Water Sample Puzzle
 	comp-debug.js
+
+	This script was based on another top-secret-project™ from TheMitoSan.
 */
 
-// Get compiler
-var COMPILER = require('./compile.js');
-
-// Set folders to be transfered
-COMPILER.copyFolders = ['img'];
-
-// Set JS data
-COMPILER.jsScriptsBeforeMain = ['systemjs.js', 'named-register.min.js'];
-COMPILER.mainJsFile = 'app.js';
-
-// Set minifier data
-COMPILER.cssMinifyLevel = 2;
+// Get nw-builder compiler
+const BUILDER = require('./nwBuilder.js');
 
 // Set NW.js data 
-COMPILER.nwVersion = '0.77.0';
-COMPILER.nwFlavor = 'sdk';
+BUILDER.nwVersion = '0.77.0';
+BUILDER.nwFlavor = 'sdk';
 
-// Start process
-COMPILER.run();
+// Start nw-builder
+BUILDER.start();
