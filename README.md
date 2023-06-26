@@ -12,9 +12,9 @@ This is a nw version of water sample - a puzzle from a classic survivor horror g
 This project was created as a challenge - I'm still learning more about this language.
 
 ## External sources used to create this app
-- [TMS.js](https://github.com/themitosan/TMS.js) created by [TheMitoSan](https://github.com/themitosan) <sup>Hi!</sup>
-- [SystemJS](https://github.com/systemjs/systemjs) created by [systemjs](https://github.com/systemjs)
-- [UglifyJS](https://github.com/mishoo/UglifyJS) created by [mishoo](https://github.com/mishoo)
-- [clean-css](https://github.com/clean-css/clean-css) created by (clean-css)[https://github.com/clean-css]
-- [nw-builder](https://github.com/nwutils/nw-builder) from [nwutils](https://github.com/nwutils)
 - [NW.js](https://nwjs.io/) - [GitHub page](https://github.com/nwjs/nw.js)
+- [UglifyJS](https://github.com/mishoo/UglifyJS) created by [mishoo](https://github.com/mishoo)
+- [nw-builder](https://github.com/nwutils/nw-builder) from [nwutils](https://github.com/nwutils)
+- [SystemJS](https://github.com/systemjs/systemjs) created by [systemjs](https://github.com/systemjs)
+- [clean-css](https://github.com/clean-css/clean-css) created by [clean-css](https://github.com/clean-css)
+- [TMS.js](https://github.com/themitosan/TMS.js) created by [TheMitoSan](https://github.com/themitosan) <sup><i>Hi!</i></sup>
