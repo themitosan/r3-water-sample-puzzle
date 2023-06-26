@@ -4,7 +4,7 @@
 */
 
 // Get compiler
-var COMPILER = require('./prepare-files.js');
+var COMPILER = require('./compiler/prepare-files.js');
 
 // Set folders to be transfered
 COMPILER.copyFolders = ['img'];

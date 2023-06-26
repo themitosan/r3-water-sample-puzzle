@@ -6,7 +6,7 @@
 */
 
 // Get nw-builder compiler
-const BUILDER = require('./nwBuilder.js');
+const BUILDER = require('./compiler/nwBuilder.js');
 
 // Set NW.js data 
 BUILDER.nwVersion = '0.77.0';

@@ -17,10 +17,13 @@ module.exports = {
     nwBuilder: require('nw-builder'),
 
 	// Get JSON file
-	packageJson: require('./package.json'),
+	packageJson: require('../package.json'),
 
 	// Start nw-builder
 	start: function(){
+
+		// Update process location
+		process.cwd('../');
 
         // Get modules
         const date = new Date,

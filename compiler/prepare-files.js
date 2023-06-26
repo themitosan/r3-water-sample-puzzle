@@ -38,7 +38,7 @@ module.exports = {
 	*/
 
 	// Get JSON file
-	packageJson: require('./package.json'),
+	packageJson: require('../package.json'),
 
 	// Require modules
 	fs: require('fs'),
@@ -53,6 +53,9 @@ module.exports = {
 
 	// Start compiler
 	prepareFiles: async function(){
+
+		// Update process location
+		process.cwd('../');
 
 		// Get main data
 		var fs = this.fs,
@@ -125,7 +128,7 @@ module.exports = {
 
 		// Update package.json and remove inc file
 		fs.writeFileSync('./tempApp/package.json', JSON.stringify(packageJson), 'utf8');
-		fs.unlinkSync('hash.inc');
+		fs.unlinkSync('./hash.inc');
 
 		/*
 			Minify files
@@ -175,9 +178,8 @@ module.exports = {
 		// Write new index file
 		fs.writeFileSync('./tempApp/index.htm', mainHtmlFile, 'utf8');
 
-		if (typeof cb === 'function'){
-			cb();
-		}
+		// Log process complete
+		console.info('INFO - Prepare files OK!');
 
 	}
 
