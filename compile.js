@@ -5,8 +5,6 @@
 	This script was based on another top-secret-project™ from TheMitoSan.
 */
 
-const { mkdir } = require('fs');
-
 module.exports = {
 
 	/*
@@ -47,7 +45,6 @@ module.exports = {
 	util: require('util'),
 	cleanCss: require('clean-css'),
 	uglifyJs: require('uglify-js'),
-	nwBuilder: require('nw-builder'),
 	htmlMinify: require('html-minifier').minify,
 
 	/*
@@ -55,12 +52,13 @@ module.exports = {
 	*/
 
 	// Start compiler
-	run: async function(){
+	prepareFiles: async function(cb){
+
+		console.clear();
 
 		// Get main data
 		var fs = this.fs,
 			buildHash = '',
-			date = new Date,
 			uglify = this.uglifyJs,
 			mainJsFile = this.mainJsFile,
 			packageJson = this.packageJson,
@@ -179,66 +177,8 @@ module.exports = {
 		// Write new index file
 		fs.writeFileSync('./tempApp/index.htm', mainHtmlFile, 'utf8');
 
-		/*
-			Setup nw-builder
-		*/
-
-		// Log data before builder setup
-		console.info(`INFO - Running nw-builder\nVersion: ${this.nwVersion}\nFlavor: ${this.nwFlavor}`);
-
-		// Setup nw-builder
-		const compileData = new this.nwBuilder({
-
-			// Main metadata
-			appName: packageJson.name,
-			appVersion: packageJson.version,
-
-			// Running mode
-			zip: !0,
-			arch: 'x64',
-			mode: 'build',
-			ourDir: './Build/',
-			srcDir: './tempApp',
-			platforms: ['win64'],
-			files: './tempApp/**/*',
-
-			// Set flavor and version
-			flavor: nwFlavor,
-			version: nwVersion,
-
-			// Windows settings
-			winIco: './tempApp/img/icon.ico',
-			winVersionString: {
-				'CompanyName': packageJson.author,
-				'ProductName': packageJson.appName,
-				'ProductShortName': packageJson.name,
-				'CompanyShortName': packageJson.author,
-				'FileDescription': packageJson.description,
-				'FileVersion': `Ver. ${packageJson.version}, nwjs: ${nwVersion}`,
-				'LegalCopyright': `2023, ${date.getFullYear()} - ${packageJson.author}`
-			}
-
-		});
-
-		try {
-
-			// Create new hash file
-			fs.writeFileSync('hash.inc', '', 'utf8');
-			
-			// Run nw-builder
-			compileData.build().then(function(){
-			
-				// Copy required files to build dir
-				fs.writeFileSync('./version.txt', `Version: ${packageJson.version}`, 'utf8');
-				fs.writeFileSync(`./build/${packageJson.name}/win64/version.txt`, `Version: ${packageJson.version}`, 'utf8');
-
-			});
-
-		} catch (err) {
-
-			// Display error
-			throw new Error(err);
-
+		if (typeof cb === 'function'){
+			cb();
 		}
 
 	}

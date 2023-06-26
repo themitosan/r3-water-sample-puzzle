@@ -16,9 +16,19 @@ COMPILER.mainJsFile = 'app.js';
 // Set minifier data
 COMPILER.cssMinifyLevel = 2;
 
-// Set NW.js data 
-COMPILER.nwVersion = '0.77.0';
-COMPILER.nwFlavor = 'normal';
-
 // Start process
-COMPILER.run();
+COMPILER.prepareFiles(function(){
+
+	// Get nw-builder compiler
+	const BUILDER = require('./startNwBuilder.js');
+
+	// Set NW.js data 
+	BUILDER.nwVersion = '0.77.0';
+	BUILDER.nwFlavor = 'normal';
+
+	// Start nw-builder
+	setTimeout(function(){
+		BUILDER.start();
+	}, 100);
+
+});
