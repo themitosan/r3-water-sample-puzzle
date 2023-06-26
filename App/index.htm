@@ -424,16 +424,18 @@
 		<!-- App script work area -->
 		<div class="none" id="APP_SCRIPT_AREA"></div>
 
-		<!-- Required modules -->
+		<!-- APP_SCRIPT_START -->
 		<div class="none" id="APP_SCRIPT_LIST">
-			
-			<!-- TMS.js -->
-			<script type="text/javascript" src="js/TMS.js"></script>
-
-			<!-- Main module -->
-			<script type="module" src="js/init.js"></script>
-
+			<script type="text/javascript" src="js/systemjs.js"></script>
+			<script type="text/javascript" src="js/named-register.min.js"></script>
+			<script type="module" src="js/app.js"></script>
 		</div>
+		<!-- APP_SCRIPT_END -->
+
+		<!-- Start App -->
+		<script type="text/javascript">
+			window.onload=function(){Object.keys(System.registerRegistry).forEach((function(i){System.import(i)}));"undefined"!=typeof APP?window.APP.init():setTimeout((function(){window.APP.init()}),100)};
+		</script>
 
 	</body>
 </html>

@@ -7,24 +7,87 @@
 
 module.exports = {
 
-	// Get JSON files
-	packageJson: require('./package.json'),
+	/*
+		Compiler variables
+	*/
 
-	// Compiler data
+	// NW.js variables
 	nwFlavor: void 0,
 	nwVersion: void 0,
 
-	// Require nw-builder
+	// JS variables
+	mainJsFile: void 0,
+	jsScriptsBeforeMain: [],
+
+	// CSS variables
+	cssMinifyLevel: 1,
+
+	// HTML variables
+	htmlMinifyOptions: {
+		removeComments: !0,
+		useShortDoctype: !0,
+		collapseWhitespace: !0,
+		removeAttributeQuotes: !0
+	},
+
+	/*
+		Compiler Data
+	*/
+
+	// Get JSON file
+	packageJson: require('./package.json'),
+
+	// Require modules
+	cleanCss: require('clean-css'),
+	uglifyJs: require('uglify-js'),
 	nwBuilder: require('nw-builder'),
+	htmlMinify: require('html-minifier').minify,
 
 	// Start compiler
 	run: function(){
 
+		// Clear previous console data
+		console.clear();
+
 		// Get main data
-		var date = new Date,
+		var buildHash = '',
+			date = new Date,
 			fs = require('fs'),
+			uglify = this.uglifyJs,
+			mainJsFile = this.mainJsFile,
 			packageJson = this.packageJson,
-			buildHash = fs.readFileSync('hash.inc', 'utf8');
+			jsScriptsBeforeMain = this.jsScriptsBeforeMain;
+		
+		// Check if hash.inc exists
+		if (fs.existsSync('./hash.inc') !== !0){
+			fs.writeFileSync('./hash.inc', '', 'utf8');
+		}
+		buildHash = fs.readFileSync('./hash.inc', 'utf8');
+
+		/*
+			Create tempApp dir
+		*/
+
+		// Check if tempApp folder exists
+		if (fs.existsSync('./tempApp') !== !0){
+			fs.mkdirSync('./tempApp');
+		}
+
+		// Copy img dir
+		fs.cp('./App/img', './tempApp/img', { recursive: !0, force: !0 }, function(err){
+			if (err) { console.error(err); }
+		});
+
+		// Check if node_modules dir exists
+		if (fs.existsSync('./App/node_modules') === !0){
+			fs.cp('./App/node_modules', './tempApp/node_modules', { recursive: !0, force: !0 }, function(err){
+				if (err) { console.error(err); }
+			});
+		}
+
+		/*
+			Update package.json
+		*/
 
 		// Get run data
 		nwFlavor = this.nwFlavor;
@@ -41,8 +104,60 @@ module.exports = {
 		packageJson.window.icon = 'img/icon.png';
 
 		// Update package.json and remove inc file
-		fs.writeFileSync('./App/package.json', JSON.stringify(packageJson), 'utf8');
+		fs.writeFileSync('./tempApp/package.json', JSON.stringify(packageJson), 'utf8');
 		fs.unlinkSync('hash.inc');
+
+		/*
+			Minify files
+		*/
+
+		/*
+			JS
+		*/
+
+		// Process JS
+		var tempJsScripts = '<div class="none" id="APP_SCRIPT_LIST">',
+			mainHtmlFile = fs.readFileSync(`./App/index.htm`, 'utf8'),
+			readAppJsFile = fs.readFileSync(`./App/js/${mainJsFile}`, 'utf8');
+
+		// Get main HTML file
+		const jsHtmlStart = mainHtmlFile.slice(0, mainHtmlFile.indexOf('<!-- APP_SCRIPT_START -->')),
+			jsHtmlEnd = mainHtmlFile.slice((mainHtmlFile.indexOf('<!-- APP_SCRIPT_END -->') + 23));
+		
+		// Process scripts before main module
+		jsScriptsBeforeMain.forEach(function(cFile){
+			tempJsScripts = `${tempJsScripts}<script type="text/javascript">${fs.readFileSync(`./App/js/${cFile}`, 'utf8')}</script>`;
+		});
+
+		// Add main module and start script
+		tempJsScripts = `${tempJsScripts}<script type="module">${uglify.minify(readAppJsFile).code}</script>`;
+
+		// Wrap JS section
+		mainHtmlFile = `${jsHtmlStart}\n${tempJsScripts}</div>${jsHtmlEnd}`;
+
+		/*
+			CSS
+		*/
+
+		// Minify css
+		const cleanCssData = new this.cleanCss({ level: this.cssMinifyLevel }).minify(fs.readFileSync('./App/css/style.css', 'utf8'));
+		
+		// Update HTML
+		mainHtmlFile = mainHtmlFile.replace('<link rel="stylesheet" type="text/css" href="css/style.css">', `<style type="text/css">${cleanCssData.styles}</style>`);
+
+		/*
+			HTML
+		*/
+
+		// Minify HTML file
+		mainHtmlFile = this.htmlMinify(mainHtmlFile, this.htmlMinifyOptions);
+
+		// Write new index file
+		fs.writeFileSync('./tempApp/index.htm', mainHtmlFile, 'utf8');
+
+		/*
+			Setup nw-builder
+		*/
 
 		// Log data before builder setup
 		console.info(`INFO - Running compiler\n\nVersion: ${this.nwVersion}\nFlavor: ${this.nwFlavor}`);
@@ -58,10 +173,10 @@ module.exports = {
 			zip: !0,
 			arch: 'x64',
 			mode: 'build',
-			srcDir: './App',
 			ourDir: './Build/',
-			files: './App/**/*',
+			srcDir: './tempApp',
 			platforms: ['win64'],
+			files: './tempApp/**/*',
 
 			// Set flavor and version
 			flavor: nwFlavor,
@@ -70,13 +185,13 @@ module.exports = {
 			// Windows settings
 			winIco: './App/img/icon.ico',
 			winVersionString: {
-				'ProductName': packageJson.name,
 				'CompanyName': packageJson.author,
+				'ProductName': packageJson.appName,
 				'ProductShortName': packageJson.name,
 				'CompanyShortName': packageJson.author,
 				'FileDescription': packageJson.description,
-				'LegalCopyright': `2023, ${date.getFullYear()} - ${packageJson.author}`,
-				'FileVersion': `Ver. ${packageJson.version}, nwjs: ${nwVersion}`
+				'FileVersion': `Ver. ${packageJson.version}, nwjs: ${nwVersion}`,
+				'LegalCopyright': `2023, ${date.getFullYear()} - ${packageJson.author}`
 			}
 
 		});
@@ -86,14 +201,19 @@ module.exports = {
 			// Create new hash file
 			fs.writeFileSync('hash.inc', '', 'utf8');
 
+			
 			// Run nw-builder
 			compileData.build().then(function(){
-	
+			
 				// Copy required files to build dir
 				fs.writeFileSync('./version.txt', `Version: ${packageJson.version}`, 'utf8');
 				fs.writeFileSync(`./build/${packageJson.name}/win64/version.txt`, `Version: ${packageJson.version}`, 'utf8');
-	
+
+				// Remove tempApp dir
+				fs.rmSync('./tempApp', { force: !0, recursive: !0 });
+
 			});
+			
 
 		} catch (err) {
 

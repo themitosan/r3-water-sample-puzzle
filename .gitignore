@@ -1,4 +1,13 @@
-node_modules/
+# Main generated TS script
+App/js/app.js
+
+# Build dirs
+tempApp/*
 Cache/*
 Build/*
+
+# General folders and formats
+node_modules/
+version.txt
 *.bat
+*.map
