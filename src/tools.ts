@@ -1,5 +1,5 @@
 /*
-	R3 Auto Map Gen.
+	R3 Water Sample Puzzle
 	tools.js
 */
 

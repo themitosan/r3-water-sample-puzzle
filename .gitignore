@@ -2,9 +2,9 @@
 App/js/app.js
 
 # Build dirs
-tempApp/*
-Cache/*
-Build/*
+tempApp/
+Cache/
+Build/
 
 # General folders and formats
 node_modules/

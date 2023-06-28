@@ -24,11 +24,12 @@
         "title": "R3 Water Sample Puzzle - Please wait..."
     },
     "scripts": {
-        "dev": "nw",
+        "dev": "nw -dev",
         "compileTs": "tsc",
         "build-main": "node comp-main.js",
         "build-debug": "node comp-debug.js",
-        "prepFiles": "node comp-prepFiles.js"
+        "prepFiles": "node comp-prepFiles.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
     },
     "dependencies": {
         "nw": "^0.77.0-sdk"

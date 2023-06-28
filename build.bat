@@ -9,4 +9,4 @@ echo.
 node comp-prepFiles.js
 node comp-main.js
 echo.
-pause
+exit
