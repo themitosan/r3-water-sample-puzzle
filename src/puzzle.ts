@@ -190,7 +190,7 @@ function playerVictory(){
     window.alert('Yaay - You did it!\nCongratulations!');
 
     // Get a new puzzle
-    getRandomPuzzle();
+    getRandomPuzzle(!1, !1);
 
 }
 
