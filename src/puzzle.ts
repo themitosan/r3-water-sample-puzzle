@@ -1,9 +1,7 @@
 /*
     R3 Water Sample Puzzle
-    puzzle.js
+    puzzle.ts
 */
-
-import { puzzle } from './main.js';
 
 declare var APP: any;
 
@@ -94,7 +92,7 @@ export function getRandomPuzzle(resetScore: boolean, resetSample:boolean){
     APP.graphics.renderPuzzle();
 
     // Check puzzle state
-    APP.puzzle.checkPuzzleState();
+    checkPuzzleState();
 
 }
 
@@ -128,7 +126,7 @@ export function updateRow(row:string, direction:string){
     APP.graphics.renderPuzzle();
 
     // Check puzzle state
-    APP.puzzle.checkPuzzleState();
+    checkPuzzleState();
 
 }
 
@@ -186,13 +184,13 @@ function playerVictory(){
     APP.graphics.updateActiveRow(!0);
 
     // Bump score
-    APP.puzzle.playerData.score++;
+    playerData.score++;
 
     // Display message
     window.alert('Yaay - You did it!\nCongratulations!');
 
     // Get a new puzzle
-    APP.puzzle.getRandomPuzzle();
+    getRandomPuzzle();
 
 }
 
