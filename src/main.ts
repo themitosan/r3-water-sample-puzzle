@@ -14,7 +14,13 @@ import { getRandomPuzzle } from './puzzle';
 /*
     Variables
 */
-const manifest = nw.App.manifest;
+
+var manifest:any = {
+    hash: 'DIRTY',
+    version: 'Unknown',
+    author: 'TheMitoSan',
+    appName: 'R3 Water Sample Puzzle'
+};
 
 /*
     Functions
@@ -27,6 +33,11 @@ export function about(){
 
 // Start app
 export function init(){
+
+    // Fix for non nw scenario
+    if (typeof nw !== 'undefined'){
+        manifest = nw.App.manifest;
+    }
 
     // Fix hash data
     if (manifest.hash === ''){
