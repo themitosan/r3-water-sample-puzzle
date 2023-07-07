@@ -3,15 +3,16 @@
     graphics.js
 */
 
-declare var TMS: any;
-declare var APP: any;
+// Import TS modules
+import * as TMS from './TMS';
+import { currentPuzzle, rowState } from './puzzle';
 
 /*
     Functions
 */
 
 // Update active row icon
-export function updateActiveRow(cRow:string, skipAddClass:boolean){
+export function updateActiveRowGUI(cRow:string = 'A', skipAddClass:boolean = !1){
     
     const rowList = ['A', 'B', 'C'];
     rowList.forEach(function(remRow){
@@ -29,14 +30,14 @@ export function updateActiveRow(cRow:string, skipAddClass:boolean){
 export function renderPuzzle(){
 
     // Render rows
-    Object.keys(APP.puzzle.rowState).forEach(function(cRow:string){
+    Object.keys(rowState).forEach(function(cRow:string){
 
         // Render bars
-        APP.puzzle.rowState[cRow].forEach(function(cBar:string, cIndex:string){
+        rowState[cRow].forEach(function(cBar:string, cIndex:string){
 
             // Get bar state
             var barHeight = 0;
-            if (APP.puzzle.rowState[cRow][cIndex] === !0){
+            if (rowState[cRow][cIndex] === !0){
                 barHeight = 7;
             }
 
@@ -48,7 +49,7 @@ export function renderPuzzle(){
     });
 
     // Render sample
-    APP.puzzle.currentPuzzle.forEach(function(cSize:number, cIndex:number){
+    currentPuzzle.forEach(function(cSize:number, cIndex:number){
         TMS.css(`ROW_SAMPLE_BAR_${cIndex}`, {'height': `${cSize}px`});
     });
 
@@ -64,7 +65,5 @@ export function renderResult(state: number[]){
 
 }
 
-/*
-    Export functions
-*/
-export * from './graphics.js';
+// Export module
+export * from './graphics';

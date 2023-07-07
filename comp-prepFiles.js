@@ -7,7 +7,7 @@
 var COMPILER = require('./compiler/prepare-files.js');
 
 // Set folders to be transfered
-COMPILER.copyFolders = ['img',];
+COMPILER.copyFolders = ['img'];
 
 // Set JS data
 COMPILER.jsScriptsBeforeMain = ['systemjs.js', 'named-register.min.js'];

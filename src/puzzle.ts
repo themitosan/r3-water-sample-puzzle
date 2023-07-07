@@ -3,7 +3,8 @@
     puzzle.ts
 */
 
-declare var APP: any;
+// Import TS modules
+import { renderPuzzle, updateActiveRowGUI, renderResult } from './graphics';
 
 /*
     Variables
@@ -47,14 +48,15 @@ export var playerData = {
         A: [!0, !1, !1, !1, !0, !0, !0, !1, !1, !1, !0, !0, !0, !1, !0, !0],
         B: [!0, !0, !1, !1, !0, !1, !1, !1, !1, !1, !0, !1, !0, !1, !0, !1],
         C: [!1, !1, !0, !1, !0, !1, !1, !1, !0, !0, !1, !1, !0, !1, !0, !1]
-    };
+    },
+    currentRow: string = '';
 
 /*
     Functions
 */
 
 // Get random puzzle
-export function getRandomPuzzle(resetScore: boolean, resetSample:boolean){
+export function getRandomPuzzle(resetScore: boolean = !1, resetSample:boolean = !1){
 
     // Get random puzzle from list
     const getRandPuzzle = function(){
@@ -88,18 +90,24 @@ export function getRandomPuzzle(resetScore: boolean, resetSample:boolean){
     document.getElementById('LABEL_resetSample')!.innerHTML = playerData.resetSample.toString();
 
     // Render current puzzle
-    APP.graphics.renderPuzzle();
+    renderPuzzle();
 
     // Check puzzle state
     checkPuzzleState();
 
 }
 
+// Update selected row
+export function updateActiveRow(row:string){
+    currentRow = row;
+    updateActiveRowGUI(row);
+}
+
 // Update row
 export function updateRow(row:string, direction:string){
 
-    // Update active row icon
-    APP.graphics.updateActiveRow(row);
+    // Update current row var and icon
+    updateActiveRow(row);
 
     // Get temp var for storing moving data
     var moveBar: boolean;
@@ -122,7 +130,7 @@ export function updateRow(row:string, direction:string){
     }
 
     // Render puzzle
-    APP.graphics.renderPuzzle();
+    renderPuzzle();
 
     // Check puzzle state
     checkPuzzleState();
@@ -139,9 +147,9 @@ export function checkPuzzleState(){
         };
     
     // Process all rows
-    Object.keys(APP.puzzle.rowState).forEach(function(cRow:string){
+    Object.keys(rowState).forEach(function(cRow:string){
         
-        APP.puzzle.rowState[cRow].forEach(function(cState:boolean, cIndex:number){
+        rowState[cRow].forEach(function(cState:boolean, cIndex:number){
         
             var state = 0;
             if (cState === !0){
@@ -160,7 +168,7 @@ export function checkPuzzleState(){
     });
 
     // Render result
-    APP.graphics.renderResult(finalArray);
+    renderResult(finalArray);
 
     // Check if is sample is correct
     if (finalArray.toString() === currentPuzzle.toString()){
@@ -180,7 +188,7 @@ function playerVictory(){
     };
 
     // Reset last row
-    APP.graphics.updateActiveRow(!0);
+    updateActiveRowGUI('A', !0);
 
     // Bump score
     playerData.score++;
@@ -193,7 +201,5 @@ function playerVictory(){
 
 }
 
-/*
-    Export data
-*/
-export * from './puzzle.js';
+// Export module
+export * from './puzzle';

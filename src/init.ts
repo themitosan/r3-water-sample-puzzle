@@ -6,12 +6,8 @@
 declare global {
     interface Window {
         APP: any;
-        TMS: any;
     }
 }
 
-import * as APP from './main.js';
-import * as TMS from './TMS.js';
-
-window.TMS = TMS;
+import * as APP from './main';
 window.APP = APP;

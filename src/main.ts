@@ -4,23 +4,16 @@
 */
 
 declare var nw: any;
-declare var APP: any;
-declare var TMS: any;
 
 // Import modules
-import * as Puzzle from './puzzle.js';
-import * as Graphics from './graphics.js';
+import * as TMS from './TMS';
+import { startInput } from './input';
+import { getRandomPuzzle } from './puzzle';
 
 /*
     Variables
 */
 const manifest = nw.App.manifest;
-
-/*
-    Import modules
-*/
-export const puzzle = Puzzle,
-    graphics = Graphics;
 
 /*
     Functions
@@ -50,17 +43,13 @@ export function init(){
     // Show top bar
     TMS.css('DIV_BTNS', {'height': '26px', 'filter': 'blur(0px)'});
 
-    // Prevent tab key
-    document.addEventListener('keyup', function(evt){
-        if (evt.key === 'Tab'){
-            evt.preventDefault();
-        }
-    });
-
     // Init variables
-    APP.puzzle.getRandomPuzzle();
+    getRandomPuzzle();
+
+    // Start input
+    startInput();
 
 }
 
-// Export
-export * from './main.js';
+// Export module
+export * from './main';

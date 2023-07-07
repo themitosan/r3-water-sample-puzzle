@@ -11,7 +11,14 @@ This is a nw version of water sample - a puzzle from a classic survivor horror g
 
 ![image](https://github.com/themitosan/r3-water-sample-puzzle/assets/32562725/3fe5761c-848b-42b7-952b-87e0c3a5988a)
 
-This project was created as a challenge - I'm still learning more about this language.
+This project was created as a challenge - I'm still learning more about this _creepy_ language.
+
+## How to play
+- W, S / Arrow Up, Arrow Down: Select current row
+- A, D / Arrow Left, Arrow Right: Move current row
+- F5: Get random puzzle
+
+*This game also supports DualShock 4, DualSense, PlayStation 3, GameSir X2 USB controllers.*
 
 ## External sources used to create this app
 - [NW.js](https://nwjs.io/) - [GitHub page](https://github.com/nwjs/nw.js)
