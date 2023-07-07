@@ -7,6 +7,7 @@ declare var nw: any;
 
 // Import modules
 import * as TMS from './TMS';
+import { initGUI } from './graphics';
 import { startInput } from './input';
 import { getRandomPuzzle } from './puzzle';
 
@@ -45,6 +46,9 @@ export function init(){
 
     // Init variables
     getRandomPuzzle();
+
+    // Assign GUI buttons
+    initGUI();
 
     // Start input
     startInput();

@@ -5,11 +5,27 @@
 
 // Import TS modules
 import * as TMS from './TMS';
-import { currentPuzzle, rowState } from './puzzle';
+import { about } from './main';
+import { currentPuzzle, rowState, updateRow, getRandomPuzzle } from './puzzle';
 
 /*
     Functions
 */
+
+// Assign GUI button actions
+export function initGUI(){
+
+    // Assign rows
+    ['A', 'B', 'C'].forEach(function(cRow:string){
+        (<HTMLInputElement>document.getElementById(`BTN_${cRow}_L`))!.onclick = function(){updateRow(cRow, 'left');};
+        (<HTMLInputElement>document.getElementById(`BTN_${cRow}_R`))!.onclick = function(){updateRow(cRow, 'right');};
+    });
+
+    // Assign top buttons
+    (<HTMLInputElement>document.getElementById('BTN_TOP_ABOUT'))!.onclick = function(){about();};
+    (<HTMLInputElement>document.getElementById('BTN_TOP_GET_RAND_PUZZLE'))!.onclick = function(){getRandomPuzzle(!0, !0);};
+
+}
 
 // Update active row icon
 export function updateActiveRowGUI(cRow:string = 'A', skipAddClass:boolean = !1){

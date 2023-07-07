@@ -60,12 +60,6 @@ export function startInput(){
     // Set start row
     updateSelectedRow('down');
 
-    // Assign button actions
-    ['A', 'B', 'C'].forEach(function(cRow:string){
-        (<HTMLInputElement>document.getElementById(`BTN_${cRow}_L`))!.onclick = function(){updateRow(cRow, 'left');};
-        (<HTMLInputElement>document.getElementById(`BTN_${cRow}_R`))!.onclick = function(){updateRow(cRow, 'right');};
-    });
-
     // Init keyboard
     document.addEventListener('keyup', function(evt){
         
