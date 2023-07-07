@@ -27,8 +27,8 @@
         "dev": "nw -dev",
         "compileTs": "tsc",
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build-debug": "node ./compiler/comp-nw.js --platform=win64,linux64 --flavor=sdk --nwVersion=0.77.0",
-        "build-main": "node ./compiler/comp-nw.js --platform=win64,linux64 --flavor=normal --nwVersion=0.77.0",
+        "build-debug": "node ./compiler/comp-nw.js --platform=win64 --flavor=sdk --nwVersion=0.77.0",
+        "build-main": "node ./compiler/comp-nw.js --platform=win64 --flavor=normal --nwVersion=0.77.0",
         "prepFiles": "node ./compiler/comp-prepFiles.js --mainJs=app.js --copyFolders=img,tools,forms,node_modules --exportJsSample=!1 --cssMinifyLevel=2 --jsBeforeMain=systemjs.js,named-register.min.js"
     },
     "dependencies": {
