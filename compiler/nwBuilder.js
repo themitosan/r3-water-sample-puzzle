@@ -10,10 +10,10 @@ module.exports = {
     /*
         Variables
     */
-	nwPlatforms: [],
     nwFlavor: void 0,
     nwVersion: void 0,
-        
+	nwPlatforms: ['win64', 'linux64'],
+	
     // Modules
     nwBuilder: require('nw-builder'),
 
