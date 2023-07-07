@@ -26,10 +26,10 @@
     "scripts": {
         "dev": "nw -dev",
         "compileTs": "tsc",
-        "build-main": "node comp-main.js",
-        "build-debug": "node comp-debug.js",
-        "prepFiles": "node comp-prepFiles.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build-debug": "node ./compiler/comp-nw.js --platform=win64,linux64 --flavor=sdk --nwVersion=0.77.0",
+        "build-main": "node ./compiler/comp-nw.js --platform=win64,linux64 --flavor=normal --nwVersion=0.77.0",
+        "prepFiles": "node ./compiler/comp-prepFiles.js --mainJs=app.js --copyFolders=img,tools,forms,node_modules --exportJsSample=!1 --cssMinifyLevel=2 --jsBeforeMain=systemjs.js,named-register.min.js"
     },
     "dependencies": {
         "nw": "^0.77.0-sdk"

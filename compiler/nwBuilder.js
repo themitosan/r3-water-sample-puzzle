@@ -1,8 +1,6 @@
 /*
 	R3 Water Sample Puzzle
 	nwBuilder.js
-
-	This script was based on another top-secret-project™ from TheMitoSan.
 */
 
 module.exports = {
@@ -12,8 +10,8 @@ module.exports = {
     */
     nwFlavor: void 0,
     nwVersion: void 0,
-	nwPlatforms: ['win64', 'linux64'],
-	
+	nwPlatforms: void 0,
+        
     // Modules
     nwBuilder: require('nw-builder'),
 

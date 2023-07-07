@@ -1,8 +1,6 @@
 /*
 	R3 Water Sample Puzzle
 	prepare-files.js
-
-	This script was based on another top-secret-project™ from TheMitoSan.
 */
 
 module.exports = {

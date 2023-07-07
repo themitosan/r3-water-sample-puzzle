@@ -5,9 +5,12 @@ App/js/app.js
 tempApp/
 Cache/
 Build/
+cache/
+build/
 
 # General folders and formats
 node_modules/
 version.txt
 *.bat
 *.map
+*.sh
