@@ -7,11 +7,12 @@
 var COMPILER = require('./compiler/prepare-files.js');
 
 // Set folders to be transfered
-COMPILER.copyFolders = ['img'];
+COMPILER.copyFolders = ['img',];
 
 // Set JS data
 COMPILER.jsScriptsBeforeMain = ['systemjs.js', 'named-register.min.js'];
 COMPILER.mainJsFile = 'app.js';
+COMPILER.exportJsSample = !1;
 
 // Set minifier data
 COMPILER.cssMinifyLevel = 2;

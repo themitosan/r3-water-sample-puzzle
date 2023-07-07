@@ -45,8 +45,14 @@ jobs:
     - name: Run nw-builder
       run: npm run build-main --if-present
 
-    - name: Upload artifacts
+    - name: Upload windows binaries
       uses: actions/upload-artifact@v2
       with:
-        name: R3_WSP
+        name: R3_WSP_WIN64
         path: ./Build/r3-water-sample-puzzle/win64/
+
+    - name: Upload linux binaries
+      uses: actions/upload-artifact@v2
+      with:
+        name: R3_WSP_LINUX
+        path: ./Build/r3-water-sample-puzzle/linux64/

@@ -10,6 +10,7 @@ module.exports = {
     /*
         Variables
     */
+	nwPlatforms: [],
     nwFlavor: void 0,
     nwVersion: void 0,
         
@@ -28,7 +29,8 @@ module.exports = {
         // Get modules
         const date = new Date,
             fs = require('fs'),
-            pJson = this.packageJson;
+            pJson = this.packageJson,
+            cPlatforms = this.nwPlatforms;
 
 		/*
 			Setup nw-builder
@@ -50,11 +52,11 @@ module.exports = {
 			mode: 'build',
 			ourDir: './Build/',
 			srcDir: './tempApp/',
-			platforms: ['win64'],
 			files: './tempApp/**/*',
 
-			// Set flavor and version
+			// Set flavor, version and platforms
 			flavor: this.nwFlavor,
+			platforms: cPlatforms,
 			version: this.nwVersion,
 
 			// Windows settings
@@ -81,8 +83,9 @@ module.exports = {
 
 				// Copy required files to build dir
                 console.info('INFO - Copying build version files...');
-				fs.writeFileSync('./version.txt', `Version: ${pJson.version}`, 'utf8');
-				fs.writeFileSync(`./build/${pJson.name}/win64/version.txt`, `Version: ${pJson.version}`, 'utf8');
+				cPlatforms.forEach(function(cBuildDir){
+					fs.writeFileSync(`./build/${pJson.name}/${cBuildDir}/version.txt`, `Version: ${pJson.version}`, 'utf8');
+				});
 
                 // Log status
 				console.info('INFO - Process Complete!');

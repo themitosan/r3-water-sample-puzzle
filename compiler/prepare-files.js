@@ -20,6 +20,7 @@ module.exports = {
 
 	// JS variables
 	mainJsFile: void 0,
+	exportJsSample: !1,
 	jsScriptsBeforeMain: [],
 
 	// CSS variables
@@ -141,7 +142,8 @@ module.exports = {
 		// Process JS
 		var tempJsScripts = '<div class="none" id="APP_SCRIPT_LIST">',
 			mainHtmlFile = fs.readFileSync(`./App/index.htm`, 'utf8'),
-			readAppJsFile = fs.readFileSync(`./App/js/${mainJsFile}`, 'utf8');
+			readAppJsFile = fs.readFileSync(`./App/js/${mainJsFile}`, 'utf8'),
+			jsCodeMinify = uglify.minify(readAppJsFile).code;
 
 		// Get main HTML file
 		const jsHtmlStart = mainHtmlFile.slice(0, mainHtmlFile.indexOf('<!-- APP_SCRIPT_START -->')),
@@ -153,16 +155,25 @@ module.exports = {
 		});
 
 		// Add main module and start script
-		tempJsScripts = `${tempJsScripts}<script type="module">${uglify.minify(readAppJsFile).code}</script>`;
+		console.info('INFO - Minifying JS...');
+		tempJsScripts = `${tempJsScripts}<script type="module">${jsCodeMinify}</script>`;
 
 		// Wrap JS section
 		mainHtmlFile = `${jsHtmlStart}\n${tempJsScripts}</div>${jsHtmlEnd}`;
+
+		// Check if needs to export JS sample
+		if (this.exportJsSample === !0){
+			console.info('INFO - Exporting JS sample to root dir...');
+			console.warn('\nWARN - exportJsSample is set to true! Disable this option on config file before pushing changes to git repo.\n ');
+			fs.writeFileSync('./JS_SAMPLE.js', jsCodeMinify, 'utf8');
+		}
 
 		/*
 			CSS
 		*/
 
-		// Minify css
+		// Minify CSS
+		console.info('INFO - Minifying CSS...');
 		const cleanCssData = new this.cleanCss({ level: this.cssMinifyLevel }).minify(fs.readFileSync('./App/css/style.css', 'utf8'));
 		
 		// Update HTML
@@ -173,6 +184,7 @@ module.exports = {
 		*/
 
 		// Minify HTML file
+		console.info('INFO - Minifying HTML...');
 		mainHtmlFile = this.htmlMinify(mainHtmlFile, this.htmlMinifyOptions);
 
 		// Write new index file

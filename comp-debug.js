@@ -9,6 +9,7 @@
 const BUILDER = require('./compiler/nwBuilder.js');
 
 // Set NW.js data 
+BUILDER.nwPlatforms = ['win64', 'linux64'];
 BUILDER.nwVersion = '0.77.0';
 BUILDER.nwFlavor = 'sdk';
 
