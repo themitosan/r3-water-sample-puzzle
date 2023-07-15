@@ -12,6 +12,17 @@
 		<!-- Main Canvas -->
 		<div class="APP_CANVAS" id="APP_CANVAS">
 
+			<!-- Menu -->
+			<div class="DIV_MENU" id="DIV_MENU">
+
+				<!-- Options -->
+				<div class="DIV_SELECT" id="DIV_SELECT"></div>
+
+				<!-- Label descriprion -->
+				<div class="DIV_SELECT_LABEL" id="DIV_SELECT_LABEL">???</div>
+			
+			</div>
+
 			<!-- Top buttons -->
 			<div class="DIV_BTNS" id="DIV_BTNS">
 				<input type="button" class="BTN_TOP" id="BTN_TOP_GET_RAND_PUZZLE" value="Get Another Puzzle">
@@ -19,10 +30,11 @@
 			</div>
 
 			<!-- Labels -->
-			<div class="DIV_LABELS">
+			<div class="DIV_LABELS" id="DIV_LABELS">
+				<div class="center" id="LABEL_gameMode" title="Game mode">???</div><br>
 				Sample ID: <span id="LABEL_currentSample">0</span><br>
 				Score: <span id="LABEL_playerScore">0</span><br>
-				Resets: <span id="LABEL_resetSample">0</span>
+				<div id="DIV_LABEL_resetSample">Resets: <span id="LABEL_resetSample">0</span></div>
 			</div>
 
 			<!-- Sample -->
@@ -434,7 +446,7 @@
 
 		<!-- Start App -->
 		<script type="text/javascript">
-			window.onload=function(){Object.keys(System.registerRegistry).forEach((function(i){System.import(i)}));"undefined"!=typeof APP?window.APP.init():setTimeout((function(){window.APP.init()}),100)};
+			window.onload=function(){Object.keys(System.registerRegistry).forEach((function(i){System.import(i)}));"undefined"!=typeof APP?window.init():setTimeout((function(){window.init()}),100)};
 		</script>
 
 	</body>

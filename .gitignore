@@ -1,6 +1,9 @@
 # Main generated TS script
 App/js/app.js
 
+# Debug files
+JS_SAMPLE.js
+
 # Build dirs
 tempApp/
 Cache/

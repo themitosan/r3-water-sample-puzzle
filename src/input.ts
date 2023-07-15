@@ -5,51 +5,321 @@
 
 // Import TS modules
 import { about } from './main';
-import { getRandomPuzzle, updateRow, currentRow, updateActiveRow } from './puzzle';
+import { playerVictory } from './puzzle';
 
 /*
-    Variables
+    Input variables
 */
 
-const actionList = Object.freeze(Object.seal({
+var req:any,
+    gPadButtons:any = {},
+    gPadIndex: number = 0,
+    lockInput: boolean = !0,
+    gPadAxesBindings: any = [];
+
+const actionList = {
 
     // Face buttons
-    ACTION_0: function(){getRandomPuzzle(!0, !0);}, // Get random puzzle
-    ACTION_1: function(){about();},                 // Show about screen
-
+    ACTION_0: function(){return;}, // Confirm
+    ACTION_1: function(){return;}, // Cancel
+    ACTION_2: function(){return;}, // Pause
+    ACTION_3: function(){return;}, // Get random puzzle
+    
     // Arrow list
-    ARROW_UP: function(){updateSelectedRow('up');},
-    ARROW_DOWN: function(){updateSelectedRow('down');},
-    ARROW_LEFT: function(){updateRow(currentRow, 'left');},
-    ARROW_RIGHT: function(){updateRow(currentRow, 'right');}
-
-}));
+    ARROW_UP: function(){return;},
+    ARROW_DOWN: function(){return;},
+    ARROW_LEFT: function(){return;},
+    ARROW_RIGHT: function(){return;}
+    
+};
 
 /*
-    Functions
+    Input functions
 */
 
-// Update current row
-function updateSelectedRow(direction:string){
+/**
+    * Set if user can input
+    * @param lockStatus Input lock status
+*/
+export function setInputLockStatus(lockStatus: boolean){
+    lockInput = lockStatus;
+}
 
-    var rowList = ['A', 'B', 'C'],
-        index = rowList.indexOf(currentRow);
+/**
+    * Set action function
+    * @param actionName action where function will be binded (ACTION_0, ACTION_1, ARROW_UP...)
+    * @param action Function to be executed
+*/ 
+export function setActionFunction(actionName:string, action:Function){
+    actionList[actionName as keyof typeof actionList] = function(){
+        if (lockInput === !1){
+            action();
+        }
+    };
+}
 
-    switch (direction){
+/**
+    * Reset action list
+*/
+export function resetActionList(){
+    Object.keys(actionList).forEach(function(cAction){
+        actionList[cAction as keyof typeof actionList] = function(){return;}
+    });
+    gPadAxesBindings = [];
+}
 
-        case 'up':
-            index--;
-            break;
-        
-        case 'down':
-            index++;
-            break;
+/**
+    * Set gamepad button action
+    * @param id button id
+    * @param action actionlist to be executed
+    * @param timeout time pressed required to button take action 
+*/
+export function setGamepadButtonAction(id: number, actionId: string, timeout: number = 1){
+    if (timeout < 1){
+        timeout = 1;
+    }
+    if (gPadButtons[id] !== void 0){
+        gPadButtons[id] = {rTime: timeout, current: 0, actionId: actionId};
+    }
+}
+
+/** 
+    * Set gamepad axes action
+    * @param number axe id
+    * @param rangeMin range start of trigger
+    * @param rangeMax range end of trigger
+    * @param action function to be executed
+    * @param timeout time required to action
+*/
+function setGamepadAxesAction(id: number, rangeMin: number, rangeMax:number, action: Function, timeout: number = 1){
+
+    // Fix input
+    if (timeout < 1){
+        timeout = 1;
+    }
+    if (rangeMin < -1){
+        rangeMin = -1;
+    }
+    if (rangeMax > 1){
+        rangeMax = 1;
+    }
+
+    const newBinding = {id: id, rangeMin: rangeMin, rangeMax: rangeMax, current: 0, rTime: timeout, action: action};
+
+    // Check if current binding exists
+    if (gPadAxesBindings.indexOf(newBinding) === -1){
+        gPadAxesBindings.push(newBinding);
+    }
+
+}
+
+/**
+    * Handle gamepad input
+*/
+function handleGamepad(){
+
+    // Get current gamepad
+    const gPad = navigator.getGamepads()[gPadIndex];
+
+    //console.info(gPad?.axes);
+
+    // Process buttons
+    gPad?.buttons.forEach(function(_a, cIndex){
+            
+        const cButtonReg = gPadButtons[cIndex],
+            cButtonJoy = gPad.buttons[cIndex];
+
+        switch (cButtonJoy.pressed){
+
+            case !0:
+                cButtonReg.current++;
+                // console.info(`INFO - Button ${cIndex} is pressed!`);
+                break;
+
+            case !1:
+                if (cButtonReg.current >= cButtonReg.rTime){
+                    cButtonReg.current = 0;
+                    if (actionList[cButtonReg.actionId as keyof typeof actionList] !== void 0){
+                        actionList[cButtonReg.actionId as keyof typeof actionList]();
+                    }
+                }
+                break;
+
+        }
+
+    });
+
+    // Process axes
+    if (gPadAxesBindings.length !== 0){
+
+        gPadAxesBindings.forEach(function(cActionData:any, cActionIndex:number){
+            gPad?.axes.forEach(function(cAxe, cAxeIndex:number){
+                if (cAxeIndex === cActionData.id){
+
+                    var checkList = [cAxe >= cActionData.rangeMin, cAxe <= cActionData.rangeMax];
+                        
+                    // Check if ranges are negative
+                    if (cActionData.rangeMin < 0 && cActionData.rangeMax < 0){
+                        checkList = [cAxe <= cActionData.rangeMin, cAxe >= cActionData.rangeMax];
+                    }
+
+                    if (checkList.indexOf(!1) === -1){
+                        gPadAxesBindings[cActionIndex].current++;
+                    } else {
+
+                        if (cActionData.current > cActionData.rTime){
+                            gPadAxesBindings[cActionIndex].current = 0;
+                            gPadAxesBindings[cActionIndex].action();
+                        }
+
+                    }
+
+                }
+            });
+        });
 
     }
 
-    // Check if next index is valid
-    if (index > -1 && index < rowList.length){
-        updateActiveRow(rowList[index]);
+    // End
+    req = window.requestAnimationFrame(handleGamepad);
+
+}
+
+/**
+    * Set default bindings
+    * @param gPad Gamepad
+*/
+function setDefaultBindings(gPad:Gamepad | null){
+
+    // Get gamepad id
+    switch (gPad!.id){
+
+        // Sony Dualsense
+        case 'Sony Interactive Entertainment Wireless Controller (STANDARD GAMEPAD Vendor: 054c Product: 0ce6)':
+                
+            // Buttons
+            setGamepadButtonAction(0, 'ACTION_0');
+            setGamepadButtonAction(1, 'ACTION_1');
+            setGamepadButtonAction(9, 'ACTION_2');
+            setGamepadButtonAction(3, 'ACTION_3');
+
+            // Arrow buttons
+            setGamepadButtonAction(12, 'ARROW_UP');
+            setGamepadButtonAction(13, 'ARROW_DOWN');
+            setGamepadButtonAction(14, 'ARROW_LEFT');
+            setGamepadButtonAction(15, 'ARROW_RIGHT');
+
+            // Axes
+            setGamepadAxesAction(1, -0.8, -1, actionList.ARROW_UP);
+            setGamepadAxesAction(1, 0.8, 1, actionList.ARROW_DOWN);
+            setGamepadAxesAction(0, -0.8, -1, actionList.ARROW_LEFT);
+            setGamepadAxesAction(0, 0.8, 1, actionList.ARROW_RIGHT);
+            break;
+
+        // DualShock 4
+        case 'Sony Computer Entertainment Wireless Controller (STANDARD GAMEPAD Vendor: 054c Product: 05c4)':
+
+            // Buttons
+            setGamepadButtonAction(0, 'ACTION_0');
+            setGamepadButtonAction(1, 'ACTION_1');
+            setGamepadButtonAction(9, 'ACTION_2');
+            setGamepadButtonAction(3, 'ACTION_3');
+
+            // Arrow buttons
+            setGamepadButtonAction(12, 'ARROW_UP');
+            setGamepadButtonAction(13, 'ARROW_DOWN');
+            setGamepadButtonAction(14, 'ARROW_LEFT');
+            setGamepadButtonAction(15, 'ARROW_RIGHT');
+
+            // Axes
+            setGamepadAxesAction(1, -0.8, -1, actionList.ARROW_UP);
+            setGamepadAxesAction(1, 0.8, 1, actionList.ARROW_DOWN);
+            setGamepadAxesAction(0, -0.8, -1, actionList.ARROW_LEFT);
+            setGamepadAxesAction(0, 0.8, 1, actionList.ARROW_RIGHT);
+            break;
+
+        // Playstation 3 Controller
+        case 'Sony PLAYSTATION(R)3 Controller (STANDARD GAMEPAD Vendor: 054c Product: 0268)':
+
+            // Buttons
+            setGamepadButtonAction(0, 'ACTION_0');
+            setGamepadButtonAction(1, 'ACTION_1');
+            setGamepadButtonAction(2, 'ACTION_2');
+            setGamepadButtonAction(3, 'ACTION_3');
+
+            // Arrow buttons
+            setGamepadButtonAction(12, 'ARROW_UP');
+            setGamepadButtonAction(13, 'ARROW_DOWN');
+            setGamepadButtonAction(14, 'ARROW_LEFT');
+            setGamepadButtonAction(15, 'ARROW_RIGHT');
+
+            // Analog
+            setGamepadAxesAction(1, -0.8, -1, actionList.ARROW_UP);
+            setGamepadAxesAction(1, 0.8, 1, actionList.ARROW_DOWN);
+            setGamepadAxesAction(0, -0.8, -1, actionList.ARROW_LEFT);
+            setGamepadAxesAction(0, 0.8, 1, actionList.ARROW_RIGHT);
+            break;
+
+        // GameSir X2 USB-C
+        case 'GAMESIR Gamesir-X2 Type-C (Vendor: 05ac Product: 3b06)':
+
+            // Buttons
+            setGamepadButtonAction(0, 'ACTION_0');       // Circle:      Get random puzzle
+            setGamepadButtonAction(3, 'ACTION_1');       // Triangle:    Show about
+
+            /*
+                Axes
+            */
+
+            // Arrows
+            setGamepadAxesAction(7, -0.8, -1, actionList.ARROW_UP);
+            setGamepadAxesAction(7, 0.8, 1, actionList.ARROW_DOWN);
+            setGamepadAxesAction(6, -0.8, -1, actionList.ARROW_LEFT);
+            setGamepadAxesAction(6, 0.8, 1, actionList.ARROW_RIGHT);
+
+            // Analog
+            setGamepadAxesAction(1, -0.8, -1, actionList.ARROW_UP);
+            setGamepadAxesAction(1, 0.8, 1, actionList.ARROW_DOWN);
+            setGamepadAxesAction(0, -0.8, -1, actionList.ARROW_LEFT);
+            setGamepadAxesAction(0, 0.8, 1, actionList.ARROW_RIGHT);
+            break;
+
+        // Generic SNES USB controller
+        case 'USB gamepad            (Vendor: 081f Product: e401)':
+            
+            // Buttons
+            setGamepadButtonAction(1, 'ACTION_0');       // Circle:      Get random puzzle
+            setGamepadButtonAction(0, 'ACTION_1');       // Triangle:    Show about
+
+            // Axes
+            setGamepadAxesAction(1, -0.8, -1, actionList.ARROW_UP);
+            setGamepadAxesAction(1, 0.8, 1, actionList.ARROW_DOWN);
+            setGamepadAxesAction(0, -0.8, -1, actionList.ARROW_LEFT);
+            setGamepadAxesAction(0, 0.8, 1, actionList.ARROW_RIGHT);
+            break; 
+
+        // Default case (Using DS)
+        default:
+
+            // Buttons
+            setGamepadButtonAction(0, 'ACTION_0');
+            setGamepadButtonAction(1, 'ACTION_1');
+            setGamepadButtonAction(2, 'ACTION_2');
+            setGamepadButtonAction(3, 'ACTION_3');
+
+            // Arrow buttons
+            setGamepadButtonAction(12, 'ARROW_UP');
+            setGamepadButtonAction(13, 'ARROW_DOWN');
+            setGamepadButtonAction(14, 'ARROW_LEFT');
+            setGamepadButtonAction(15, 'ARROW_RIGHT');
+
+            // Axes
+            setGamepadAxesAction(1, -0.8, -1, actionList.ARROW_UP);
+            setGamepadAxesAction(1, 0.8, 1, actionList.ARROW_DOWN);
+            setGamepadAxesAction(0, -0.8, -1, actionList.ARROW_LEFT);
+            setGamepadAxesAction(0, 0.8, 1, actionList.ARROW_RIGHT);
+            break;
+
     }
 
 }
@@ -57,14 +327,16 @@ function updateSelectedRow(direction:string){
 // Start input
 export function startInput(){
 
-    // Set start row
-    updateSelectedRow('down');
-
     // Init keyboard
     document.addEventListener('keyup', function(evt){
-        
-        // Prevent tab key
-        if (evt.key === 'Tab'){
+
+        // Prevent default key list
+        const preventList = [
+            'Tab'
+        ];
+
+        // Prevent key list
+        if (preventList.indexOf(evt.key) === -1){
             evt.preventDefault();
         }
 
@@ -87,12 +359,16 @@ export function startInput(){
                 actionList.ARROW_RIGHT();
                 break;
 
-            case 'F5':
-                actionList.ACTION_0();
+            case 'Escape':
+                actionList.ACTION_2();
                 break;
 
             case 'F1':
-                actionList.ACTION_1();
+                about();
+                break;
+            
+            case 'F4':
+                playerVictory();
                 break;
 
         }
@@ -116,6 +392,38 @@ export function startInput(){
                 actionList.ARROW_RIGHT();
                 break;
 
+            case 'k':
+                actionList.ACTION_0();
+                break;
+            
+            case 'l':
+                actionList.ACTION_1();
+                break;
+
+            case 'i':
+                actionList.ACTION_3();
+                break;
+
+            case ' ':
+                actionList.ACTION_2();
+                break;
+
+            case '5':
+                actionList.ACTION_0();
+                break;
+            
+            case '6':
+                actionList.ACTION_1();
+                break;
+
+            case '0':
+                actionList.ACTION_2();
+                break;
+            
+            case '8':
+                actionList.ACTION_3();
+                break;
+
         }
 
     });
@@ -123,255 +431,6 @@ export function startInput(){
     /*
         Gamepad
     */
-
-    // Set variables
-    var req:any,
-        gPadButtons:any = {},
-        gPadIndex: number = 0,
-        gPadAxesBindings: any = [];
-
-    // Handle gamepad input
-    const handleGamepad = function(){
-
-        // Get current gamepad
-        const gPad = navigator.getGamepads()[gPadIndex];
-
-        //console.info(gPad?.axes);
-
-        // Process buttons
-        gPad?.buttons.forEach(function(a, cIndex){
-            
-            const cButtonReg = gPadButtons[cIndex],
-                cButtonJoy = gPad.buttons[cIndex];
-
-            switch (cButtonJoy.pressed){
-
-                case !0:
-                    cButtonReg.current++;
-                    //console.info(`INFO - Button ${cIndex} is pressed!`);
-                    break;
-
-                case !1:
-                    if (cButtonReg.current >= cButtonReg.rTime){
-                        cButtonReg.current = 0;
-                        cButtonReg.action();
-                    }
-                    break;
-
-            }
-
-        });
-
-        // Process axes
-        if (gPadAxesBindings.length !== 0){
-
-            gPadAxesBindings.forEach(function(cActionData:any, cActionIndex:number){
-                gPad?.axes.forEach(function(cAxe, cAxeIndex:number){
-                    if (cAxeIndex === cActionData.id){
-
-                        var checkList = [cAxe >= cActionData.rangeMin, cAxe <= cActionData.rangeMax];
-                        
-                        // Check if ranges are negative
-                        if (cActionData.rangeMin < 0 && cActionData.rangeMax < 0){
-                            checkList = [cAxe <= cActionData.rangeMin, cAxe >= cActionData.rangeMax];
-                        }
-
-                        if (checkList.indexOf(!1) === -1){
-                            gPadAxesBindings[cActionIndex].current++;
-                        } else {
-
-                            if (cActionData.current > cActionData.rTime){
-                                gPadAxesBindings[cActionIndex].current = 0;
-                                gPadAxesBindings[cActionIndex].action();
-                            }
-
-                        }
-
-                    }
-                });
-            });
-
-        }
-
-        // End
-        req = window.requestAnimationFrame(handleGamepad);
-
-    },
-
-    /**
-        * 
-        * @param number axe id
-        * @param rangeMin range start of trigger
-        * @param rangeMax range end of trigger
-        * @param action function to be executed
-        * @param timeout time required to action
-    */
-    setGamepadAxesAction = function(id: number, rangeMin: number, rangeMax:number, action: Function, timeout: number = 1){
-        
-        // Fix input
-        if (timeout < 1){
-            timeout = 1;
-        }
-        if (rangeMin < -1){
-            rangeMin = -1;
-        }
-        if (rangeMax > 1){
-            rangeMax = 1;
-        }
-
-        // Check if current binding
-        const newBinding = {id: id, rangeMin: rangeMin, rangeMax: rangeMax, action: action, current: 0, rTime: timeout};
-        if (gPadAxesBindings.indexOf(newBinding) === -1){
-            gPadAxesBindings.push(newBinding);
-        }
-
-    },
-    
-    /**
-        * Set gamepad button action
-        * @param id button id
-        * @param action function to be executed
-        * @param timeout time pressed required to button take action 
-    */
-    setGamepadButtonAction = function(id: number, action: Function, timeout: number = 1){
-        if (timeout < 1){
-            timeout = 1;
-        }
-        if (gPadButtons[id] !== void 0){
-            gPadButtons[id] = {rTime: timeout, current: 0, action: action};
-        }
-    },
-
-    /**
-        * Set default bindings
-        * @param gPad Gamepad
-    */
-    setDefaultBindings = function(gPad:Gamepad | null){
-
-        // Get gamepad id
-        switch (gPad!.id){
-
-            // Sony Dualsense
-            case 'Sony Interactive Entertainment Wireless Controller (STANDARD GAMEPAD Vendor: 054c Product: 0ce6)':
-                
-                // Buttons
-                setGamepadButtonAction(1, actionList.ACTION_0);       // Circle:      Get random puzzle
-                setGamepadButtonAction(3, actionList.ACTION_1);       // Triangle:    Show about
-
-                // Arrow buttons
-                setGamepadButtonAction(12, actionList.ARROW_UP);
-                setGamepadButtonAction(13, actionList.ARROW_DOWN);
-                setGamepadButtonAction(14, actionList.ARROW_LEFT);
-                setGamepadButtonAction(15, actionList.ARROW_RIGHT);
-
-                // Axes
-                setGamepadAxesAction(1, -0.8, -1, actionList.ARROW_UP);
-                setGamepadAxesAction(1, 0.8, 1, actionList.ARROW_DOWN);
-                setGamepadAxesAction(0, -0.8, -1, actionList.ARROW_LEFT);
-                setGamepadAxesAction(0, 0.8, 1, actionList.ARROW_RIGHT);
-                break;
-
-            // DualShock 4
-            case 'Sony Computer Entertainment Wireless Controller (STANDARD GAMEPAD Vendor: 054c Product: 05c4)':
-
-                // Buttons
-                setGamepadButtonAction(1, actionList.ACTION_0);       // Circle:      Get random puzzle
-                setGamepadButtonAction(3, actionList.ACTION_1);       // Triangle:    Show about
-
-                // Arrow buttons
-                setGamepadButtonAction(12, actionList.ARROW_UP);
-                setGamepadButtonAction(13, actionList.ARROW_DOWN);
-                setGamepadButtonAction(14, actionList.ARROW_LEFT);
-                setGamepadButtonAction(15, actionList.ARROW_RIGHT);
-
-                // Axes
-                setGamepadAxesAction(1, -0.8, -1, actionList.ARROW_UP);
-                setGamepadAxesAction(1, 0.8, 1, actionList.ARROW_DOWN);
-                setGamepadAxesAction(0, -0.8, -1, actionList.ARROW_LEFT);
-                setGamepadAxesAction(0, 0.8, 1, actionList.ARROW_RIGHT);
-                break;
-
-            // GameSir X2 USB-C
-            case 'GAMESIR Gamesir-X2 Type-C (Vendor: 05ac Product: 3b06)':
-
-                // Buttons
-                setGamepadButtonAction(0, actionList.ACTION_0);       // Circle:      Get random puzzle
-                setGamepadButtonAction(3, actionList.ACTION_1);       // Triangle:    Show about
-
-                /*
-                    Axes
-                */
-
-                // Arrows
-                setGamepadAxesAction(7, -0.8, -1, actionList.ARROW_UP);
-                setGamepadAxesAction(7, 0.8, 1, actionList.ARROW_DOWN);
-                setGamepadAxesAction(6, -0.8, -1, actionList.ARROW_LEFT);
-                setGamepadAxesAction(6, 0.8, 1, actionList.ARROW_RIGHT);
-
-                // Analog
-                setGamepadAxesAction(1, -0.8, -1, actionList.ARROW_UP);
-                setGamepadAxesAction(1, 0.8, 1, actionList.ARROW_DOWN);
-                setGamepadAxesAction(0, -0.8, -1, actionList.ARROW_LEFT);
-                setGamepadAxesAction(0, 0.8, 1, actionList.ARROW_RIGHT);
-                break;
-
-            // Playstation 3 Controller
-            case 'Sony PLAYSTATION(R)3 Controller (STANDARD GAMEPAD Vendor: 054c Product: 0268)':
-
-                // Buttons
-                setGamepadButtonAction(1, actionList.ACTION_0);       // Circle:      Get random puzzle
-                setGamepadButtonAction(3, actionList.ACTION_1);       // Triangle:    Show about
-
-                // Arrow buttons
-                setGamepadButtonAction(12, actionList.ARROW_UP);
-                setGamepadButtonAction(13, actionList.ARROW_DOWN);
-                setGamepadButtonAction(14, actionList.ARROW_LEFT);
-                setGamepadButtonAction(15, actionList.ARROW_RIGHT);
-
-                // Analog
-                setGamepadAxesAction(1, -0.8, -1, actionList.ARROW_UP);
-                setGamepadAxesAction(1, 0.8, 1, actionList.ARROW_DOWN);
-                setGamepadAxesAction(0, -0.8, -1, actionList.ARROW_LEFT);
-                setGamepadAxesAction(0, 0.8, 1, actionList.ARROW_RIGHT);
-                break;
-
-            // Generic SNES USB controller
-            case 'USB gamepad            (Vendor: 081f Product: e401)':
-            
-                // Buttons
-                setGamepadButtonAction(1, actionList.ACTION_0);       // Circle:      Get random puzzle
-                setGamepadButtonAction(0, actionList.ACTION_1);       // Triangle:    Show about
-
-                // Axes
-                setGamepadAxesAction(1, -0.8, -1, actionList.ARROW_UP);
-                setGamepadAxesAction(1, 0.8, 1, actionList.ARROW_DOWN);
-                setGamepadAxesAction(0, -0.8, -1, actionList.ARROW_LEFT);
-                setGamepadAxesAction(0, 0.8, 1, actionList.ARROW_RIGHT);
-                break; 
-
-            // Default case (Using DS)
-            default:
-
-                // Buttons
-                setGamepadButtonAction(1, actionList.ACTION_0);       // Circle:      Get random puzzle
-                setGamepadButtonAction(3, actionList.ACTION_1);       // Triangle:    Show about
-
-                // Arrow buttons
-                setGamepadButtonAction(12, actionList.ARROW_UP);
-                setGamepadButtonAction(13, actionList.ARROW_DOWN);
-                setGamepadButtonAction(14, actionList.ARROW_LEFT);
-                setGamepadButtonAction(15, actionList.ARROW_RIGHT);
-
-                // Axes
-                setGamepadAxesAction(1, -0.8, -1, actionList.ARROW_UP);
-                setGamepadAxesAction(1, 0.8, 1, actionList.ARROW_DOWN);
-                setGamepadAxesAction(0, -0.8, -1, actionList.ARROW_LEFT);
-                setGamepadAxesAction(0, 0.8, 1, actionList.ARROW_RIGHT);
-                break;
-
-        }
-
-    };
 
     // Init gamepad
     window.addEventListener('gamepadconnected', function(data){
@@ -382,7 +441,7 @@ export function startInput(){
         
         // Set buttons
         gPad?.buttons.forEach(function(a, cIndex:number){
-            gPadButtons[cIndex] = {rTime: 1, current: 0, action: function(){return;}};
+            gPadButtons[cIndex] = {rTime: 1, current: 0, actionId: ''};
         });
 
         // Set default bindings

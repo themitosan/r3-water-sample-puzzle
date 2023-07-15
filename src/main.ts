@@ -3,13 +3,17 @@
     main.ts
 */
 
+// Declare globals
 declare var nw: any;
+declare global {
+    interface Window {
+        init: any;
+    }
+}
 
 // Import modules
-import * as TMS from './TMS';
-import { initGUI } from './graphics';
-import { startInput } from './input';
-import { getRandomPuzzle } from './puzzle';
+import { initGui, fadeOutScreen } from './gui';
+import { startInput, resetActionList, setInputLockStatus } from './input';
 
 /*
     Variables
@@ -52,19 +56,33 @@ export function init(){
     document.title = name;
     console.info(name);
 
-    // Show top bar
-    TMS.css('DIV_BTNS', {'height': '26px', 'filter': 'blur(0px)'});
-
-    // Init variables
-    getRandomPuzzle();
-
     // Assign GUI buttons
-    initGUI();
+    initGui();
 
     // Start input
     startInput();
 
+    // Request focus
+    nw.Window.get().focus();
+
 }
 
-// Export module
-export * from './main';
+/**
+    * Close app
+*/
+export function closeGame(){
+
+    // Disable input and fade out screen
+    setInputLockStatus(!0);
+    resetActionList();
+    fadeOutScreen();
+
+    // Close app
+    setTimeout(function(){
+        nw.App.quit();
+    }, 1010);
+
+}
+
+// Set init as a global function
+window.init = init;

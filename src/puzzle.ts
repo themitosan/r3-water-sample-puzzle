@@ -4,6 +4,8 @@
 */
 
 // Import TS modules
+import { setActionFunction, resetActionList } from './input';
+import { hideMainMenu, displayMenuOptions, mainMenu, pauseMenu } from './gui';
 import { renderPuzzle, updateActiveRowGUI, renderResult } from './graphics';
 
 /*
@@ -37,42 +39,181 @@ const puzzleList = [
 
 ]
 
-// Current puzzle
+// Puzzle variables
 export var playerData = {
         score: 0,
         puzzleId: 0,
         resetSample: 0
     },
     currentPuzzle: number[] = [],
+    remainingPuzzles: number[] = [],
     rowState:any = {
         A: [!0, !1, !1, !1, !0, !0, !0, !1, !1, !1, !0, !0, !0, !1, !0, !0],
         B: [!0, !0, !1, !1, !0, !1, !1, !1, !1, !1, !0, !1, !0, !1, !0, !1],
         C: [!1, !1, !0, !1, !0, !1, !1, !1, !0, !0, !1, !1, !0, !1, !0, !1]
     },
-    currentRow: string = '';
+    currentRow: string = '',
+    currentGameMode: string = '';
 
 /*
     Functions
 */
 
-// Get random puzzle
-export function getRandomPuzzle(resetScore: boolean = !1, resetSample:boolean = !1){
+// (INPUT) Update current row
+export function updateSelectedRow(direction:string){
 
-    // Get random puzzle from list
-    const getRandPuzzle = function(){
-        const nextPuzzle = Math.floor(Math.random() * puzzleList.length);
-        currentPuzzle = puzzleList[nextPuzzle];
+    var rowList = ['A', 'B', 'C'],
+        index = rowList.indexOf(currentRow);
+
+    switch (direction){
+
+        case 'up':
+            index--;
+            break;
         
-        if (playerData.puzzleId === nextPuzzle){
-            getRandPuzzle();
-        } else {
-            playerData.puzzleId = nextPuzzle;
+        case 'down':
+            index++;
+            break;
+
+    }
+
+    // Check if next index is valid
+    if (index > -1 && index < rowList.length){
+        updateActiveRow(rowList[index]);
+    }
+
+}
+
+/**
+    * Returns a random puzzle id
+    * @returns a number between 0 and puzzle list length
+*/
+function getRandomPuzzleId():number{
+    return Math.floor(Math.random() * puzzleList.length);
+}
+
+/**
+    * Get random puzzle from list 
+*/
+function getRandPuzzleEndless(){
+
+    const nextPuzzle = getRandomPuzzleId();
+        
+    if (playerData.puzzleId === nextPuzzle){
+        getRandPuzzleEndless();
+    } else {
+        playerData.puzzleId = nextPuzzle;
+        currentPuzzle = puzzleList[nextPuzzle];
+    }
+
+}
+
+/**
+    * Generate random puzzle course
+*/
+function makeRandomCourse(){
+
+    while (remainingPuzzles.length < (puzzleList.length - 1)){
+
+        var nPuzzle = getRandomPuzzleId();
+
+        if (remainingPuzzles.indexOf(nPuzzle) === -1){
+            remainingPuzzles.push(nPuzzle);
         }
 
     }
 
-    // Give it a shot!
-    getRandPuzzle();
+    // Set current puzzle
+    currentPuzzle = puzzleList[remainingPuzzles[0]];
+}
+
+/**
+    * Create new game
+*/
+export function newGame(gameMode:string){
+
+    // Reset variables
+    remainingPuzzles = [];
+    playerData.score = 0;
+    playerData.resetSample = 0;
+
+    // Switch game modes
+    switch (gameMode){
+
+        case 'marathon':
+            puzzleList.forEach(function(_, cIndex){
+                remainingPuzzles.push(cIndex);
+            });
+            currentPuzzle = puzzleList[remainingPuzzles[0]];
+            break;
+        
+        case 'random':
+            makeRandomCourse();
+            break;
+
+    }
+
+    // Set game mode label
+    document.getElementById('LABEL_gameMode')!.innerHTML = gameMode.slice(0, 1).toUpperCase() + gameMode.slice(1, gameMode.length);
+
+    // Set game mode
+    currentGameMode = gameMode;
+
+    // Hide menu and display top GUI
+    hideMainMenu();
+
+    // Start this madness
+    getNewPuzzle();
+
+    // Set puzzle input actions
+    updateSelectedRow('down');
+    setPuzzleInputActions();
+
+}
+
+/**
+    * Set puzzle input actions
+*/
+export function setPuzzleInputActions(){
+    
+    // Reset all buttons
+    resetActionList();
+
+    // Pause menu
+    setActionFunction('ACTION_2', function(){displayMenuOptions(pauseMenu);});
+
+    // Set arrow button actions
+    setActionFunction('ARROW_UP', function(){updateSelectedRow('up');});
+    setActionFunction('ARROW_DOWN', function(){updateSelectedRow('down');});
+    setActionFunction('ARROW_LEFT', function(){updateRow(currentRow, 'left');});
+    setActionFunction('ARROW_RIGHT', function(){updateRow(currentRow, 'right');});
+
+    // If is endless mode, add get random puzzle button
+    if (currentGameMode === 'endless'){
+        setActionFunction('ACTION_3', function(){getNewPuzzle(!0, !0);});
+    }
+
+}
+
+/**
+    * Get new puzzle
+    * @param resetScore reset current player score
+    * @param resetSample check if needs to increase reset sample counter
+*/
+export function getNewPuzzle(resetScore: boolean = !1, resetSample:boolean = !1){
+
+    // Check if current mode isn't endless
+    if (currentGameMode !== 'endless'){
+        playerData.puzzleId = remainingPuzzles[0];
+        currentPuzzle = puzzleList[playerData.puzzleId];
+    } else {
+        getRandPuzzleEndless();
+    }
+
+    console.clear();
+    console.info(remainingPuzzles);
+    console.info(playerData);
+    console.info(puzzleList[remainingPuzzles[0]])
 
     // Check if needs to reset score
     if (resetScore === !0){
@@ -97,7 +238,10 @@ export function getRandomPuzzle(resetScore: boolean = !1, resetSample:boolean = 
 
 }
 
-// Update selected row
+/**
+    * Update selected row
+    * @param row new row
+*/
 export function updateActiveRow(row:string){
     currentRow = row;
     updateActiveRowGUI(row);
@@ -137,7 +281,9 @@ export function updateRow(row:string, direction:string){
 
 }
 
-// Check puzzle state
+/**
+    * Check puzzle state
+*/
 export function checkPuzzleState(){
     
     // Render result
@@ -177,8 +323,12 @@ export function checkPuzzleState(){
 
 }
 
-// Player won
-function playerVictory(){
+/**
+    * Player won
+*/
+export function playerVictory(){
+
+    var canGetNewPuzzle = !0;
 
     // Reset rows
     rowState = {
@@ -193,11 +343,22 @@ function playerVictory(){
     // Bump score
     playerData.score++;
 
-    // Display message
-    window.alert('Yaay - You did it!\nCongratulations!');
+    // If current game mode isn't endless, move to next puzzle
+    if (currentGameMode !== 'endless'){
+        remainingPuzzles.splice(0, 1);
+        if (remainingPuzzles.length === 0){
+            canGetNewPuzzle = !1;
+        }
+    }
 
-    // Get a new puzzle
-    getRandomPuzzle(!1, !1);
+    // Get next puzzle
+    if (canGetNewPuzzle === !0){
+        window.alert('Yaay - You did it!\nCongratulations!');
+        getNewPuzzle(!1, !1);
+    } else {
+        window.alert('It seems that you really like puzzle games!\nCongratz - you solved all puzzles!');
+        displayMenuOptions(mainMenu);
+    }
 
 }
 

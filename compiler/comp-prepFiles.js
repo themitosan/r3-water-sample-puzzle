@@ -48,12 +48,6 @@ process.argv.forEach(function(cArg){
 		argCounter++;
 	}
 
-	// Export JS sample
-	if (cArg.indexOf('--exportJsSample=') !== -1){
-		COMPILER.exportJsSample = rep(cArg);
-		argCounter++;
-	}
-
 	// CSS Minify Level
 	if (cArg.indexOf('--cssMinifyLevel=') !== -1){
 		COMPILER.cssMinifyLevel = Number(rep(cArg));
@@ -63,7 +57,7 @@ process.argv.forEach(function(cArg){
 });
 
 // Start process
-if (argCounter > 4){
+if (argCounter > 3){
 	COMPILER.prepareFiles();
 } else {
 	throw 'Unable to start nw build process since it\'s missing args!';

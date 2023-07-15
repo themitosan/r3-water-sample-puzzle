@@ -141,7 +141,9 @@ module.exports = {
 		var tempJsScripts = '<div class="none" id="APP_SCRIPT_LIST">',
 			mainHtmlFile = fs.readFileSync(`./App/index.htm`, 'utf8'),
 			readAppJsFile = fs.readFileSync(`./App/js/${mainJsFile}`, 'utf8'),
-			jsCodeMinify = uglify.minify(readAppJsFile).code;
+			jsCodeMinify = uglify.minify(readAppJsFile, {
+				compress: { module: !0 }, output: { max_line_len: !1 }
+			}).code.replace(/[\n]+/gm, '\\n');
 
 		// Get main HTML file
 		const jsHtmlStart = mainHtmlFile.slice(0, mainHtmlFile.indexOf('<!-- APP_SCRIPT_START -->')),
@@ -159,12 +161,7 @@ module.exports = {
 		// Wrap JS section
 		mainHtmlFile = `${jsHtmlStart}\n${tempJsScripts}</div>${jsHtmlEnd}`;
 
-		// Check if needs to export JS sample
-		if (this.exportJsSample === !0){
-			console.info('INFO - Exporting JS sample to root dir...');
-			console.warn('\nWARN - exportJsSample is set to true! Disable this option on config file before pushing changes to git repo.\n ');
-			fs.writeFileSync('./JS_SAMPLE.js', jsCodeMinify, 'utf8');
-		}
+		// fs.writeFileSync('./JS_SAMPLE.js', jsCodeMinify, 'utf8');
 
 		/*
 			CSS
