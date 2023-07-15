@@ -46,7 +46,7 @@ jobs:
       run: npm run build-main --if-present
 
     - name: Upload windows binaries
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: R3_WSP_WIN64
         path: ./Build/r3-water-sample-puzzle/win64/
