@@ -4,7 +4,6 @@
 */
 
 // Import TS modules
-import { about } from './main';
 import { playerVictory } from './puzzle';
 
 /*
