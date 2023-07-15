@@ -4,9 +4,10 @@
 */
 
 // Import TS modules
+import { about } from './main';
 import { setActionFunction, resetActionList } from './input';
-import { hideMainMenu, displayMenuOptions, mainMenu, pauseMenu } from './gui';
 import { renderPuzzle, updateActiveRowGUI, renderResult } from './graphics';
+import { hideMainMenu, displayMenuOptions, mainMenu, pauseMenu } from './gui';
 
 /*
     Variables
@@ -65,6 +66,7 @@ export function updateSelectedRow(direction:string){
     var rowList = ['A', 'B', 'C'],
         index = rowList.indexOf(currentRow);
 
+    // Switch row direction
     switch (direction){
 
         case 'up':
@@ -97,8 +99,10 @@ function getRandomPuzzleId():number{
 */
 function getRandPuzzleEndless(){
 
+    // Get random puzzle id
     const nextPuzzle = getRandomPuzzleId();
-        
+    
+    // Prevent selected puzzle being the same from previous one
     if (playerData.puzzleId === nextPuzzle){
         getRandPuzzleEndless();
     } else {
@@ -133,6 +137,7 @@ function makeRandomCourse(){
 export function newGame(gameMode:string){
 
     // Reset variables
+    updateActiveRow('A');
     remainingPuzzles = [];
     playerData.score = 0;
     playerData.resetSample = 0;
@@ -166,7 +171,6 @@ export function newGame(gameMode:string){
     getNewPuzzle();
 
     // Set puzzle input actions
-    updateSelectedRow('down');
     setPuzzleInputActions();
 
 }
@@ -179,8 +183,9 @@ export function setPuzzleInputActions(){
     // Reset all buttons
     resetActionList();
 
-    // Pause menu
+    // Pause menu and about screen
     setActionFunction('ACTION_2', function(){displayMenuOptions(pauseMenu);});
+    setActionFunction('ACTION_4', function(){about();});
 
     // Set arrow button actions
     setActionFunction('ARROW_UP', function(){updateSelectedRow('up');});
@@ -209,11 +214,6 @@ export function getNewPuzzle(resetScore: boolean = !1, resetSample:boolean = !1)
     } else {
         getRandPuzzleEndless();
     }
-
-    console.clear();
-    console.info(remainingPuzzles);
-    console.info(playerData);
-    console.info(puzzleList[remainingPuzzles[0]])
 
     // Check if needs to reset score
     if (resetScore === !0){
