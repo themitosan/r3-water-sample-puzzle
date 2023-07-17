@@ -3,9 +3,6 @@
     input.ts
 */
 
-// Import TS modules
-import { playerVictory } from './puzzle';
-
 /*
     Input variables
 */
@@ -429,10 +426,6 @@ export function startInput(){
 
             case 'F1':
                 actionList.ACTION_4();
-                break;
-
-            case 'F4':
-                playerVictory();
                 break;
 
         }
