@@ -72,7 +72,7 @@ export function updateSelectedRow(direction:string){
         case 'up':
             index--;
             break;
-        
+
         case 'down':
             index++;
             break;
@@ -151,7 +151,7 @@ export function newGame(gameMode:string){
             });
             currentPuzzle = puzzleList[remainingPuzzles[0]];
             break;
-        
+
         case 'random':
             makeRandomCourse();
             break;
@@ -294,16 +294,16 @@ export function checkPuzzleState(){
     
     // Process all rows
     Object.keys(rowState).forEach(function(cRow:string){
-        
+
         rowState[cRow].forEach(function(cState:boolean, cIndex:number){
-        
+
             var state = 0;
             if (cState === !0){
                 state = 10;
             }
 
             barList[cIndex] = (barList[cIndex] + state);
-        
+
         });
 
     });

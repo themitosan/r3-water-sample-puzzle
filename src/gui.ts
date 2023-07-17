@@ -176,13 +176,13 @@ export function displayMenuOptions(data:selectMenu){
 
     // Update cursor position
     const updateCursorPos = function(direction:string){
-        
+
         switch (direction){
 
             case 'prev':
                 cursorPos--;
                 break;
-            
+
             case 'next':
                 cursorPos++;
                 break;
@@ -235,19 +235,19 @@ export function displayMenuOptions(data:selectMenu){
 
     // Set gamepad data
     switch (cMenuData.selectMode){
-        
+
         case 'x':
             TMS.removeClass(cMenuData.target, 'DIV_SELECT_Y');
             setActionFunction('ARROW_LEFT', function(){updateCursorPos('prev');});
             setActionFunction('ARROW_RIGHT', function(){updateCursorPos('next');});
             break;
-        
+
         case 'y':
             TMS.addClass(cMenuData.target, 'DIV_SELECT_Y');
             setActionFunction('ARROW_UP', function(){updateCursorPos('prev');});
             setActionFunction('ARROW_DOWN', function(){updateCursorPos('next');});
             break;
-    
+
     }
 
     // Set face buttons actions
