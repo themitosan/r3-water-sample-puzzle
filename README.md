@@ -1,10 +1,8 @@
 <h1 align="center">
-    <img src="https://github.com/themitosan/r3-water-sample-puzzle/blob/main/App/img/icon.png?raw=true" alt="R3_auto_map_gen_icon" title="R3 Water Sample Puzzle" width="200"/>
+    <img src="https://github.com/themitosan/r3-water-sample-puzzle/blob/main/App/img/icon.png?raw=true" alt="R3_auto_map_gen_icon" title="R3 Water Sample Puzzle" width="200" />
     <br>R3 Water Sample Puzzle<br>
-    <p align="center">
-        <img alt="license" src="https://img.shields.io/github/license/themitosan/r3-water-sample-puzzle">
-        <img alt="workflow_status" src="https://img.shields.io/github/actions/workflow/status/themitosan/r3-water-sample-puzzle/main.yaml?style=plastic">
-    </p>
+    <img alt="license" src="https://img.shields.io/github/license/themitosan/r3-water-sample-puzzle" />
+    <img alt="workflow_status" src="https://img.shields.io/github/actions/workflow/status/themitosan/r3-water-sample-puzzle/main.yaml?style=plastic" />
 </h1>
 
 This is a nw version of water sample - a puzzle from a classic survivor horror game, created using TMS.js and TS.
