@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img src="https://github.com/themitosan/r3-water-sample-puzzle/blob/main/App/img/icon.png?raw=true" alt="R3_auto_map_gen_icon" title="R3 Water Sample Puzzle" width="200"/>
+    <img src="App/img/icon.png" alt="R3_auto_map_gen_icon" title="R3 Water Sample Puzzle" width="200"/>
     <br>R3 Water Sample Puzzle<br>
     <p align="center">
         <img alt="license" src="https://img.shields.io/github/license/themitosan/r3-water-sample-puzzle">
@@ -7,9 +7,9 @@
     </p>
 </h1>
 
-This is a nw version of water sample - a puzzle from a classic survivor horror game, created using TMS.js and TS.
+This is a nw version of water sample - a puzzle from a classic survivor horror game, created using [TMS.js](https://github.com/themitosan/TMS.js) and TS.
 
-![image](https://github.com/themitosan/r3-water-sample-puzzle/assets/32562725/3fe5761c-848b-42b7-952b-87e0c3a5988a)
+![image](preview.png)
 
 This project was created as a challenge - I'm still learning more about this _creepy_ language.
 
