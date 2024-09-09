@@ -17,7 +17,7 @@ echo IMPORTANT: Make sure to have Node.js (20.x) installed before running this s
 echo You can get it here: https://nodejs.org/
 echo.
 node ./compiler/comp-prepFiles.js --mainJs=app.js --copyFolders=img,tools,forms,node_modules --cssMinifyLevel=2 --jsBeforeMain=systemjs.js,named-register.min.js
-node ./compiler/comp-nw.js --platform=win64 --flavor=sdk --nwVersion=0.77.0
+node ./compiler/comp-nw.js --platform=win64 --flavor=sdk --nwVersion=0.91.0
 title Process complete!
 echo.
 pause
