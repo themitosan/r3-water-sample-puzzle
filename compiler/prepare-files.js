@@ -73,9 +73,7 @@ module.exports = {
 			rmDir = this.util.promisify(fs.rm);
 
 		// Check if hash.inc exists
-		if (fs.existsSync('./hash.inc') !== !0){
-			await wFileSync('./hash.inc', '', 'utf8');
-		}
+		if (fs.existsSync('./hash.inc') !== !0) await wFileSync('./hash.inc', '', 'utf8');
 		buildHash = fs.readFileSync('./hash.inc', 'utf8');
 
 		/*
@@ -116,9 +114,7 @@ module.exports = {
 		nwVersion = this.nwVersion;
 
 		// Update package.json
-		if (buildHash.length !== 0){
-			packageJson.hash = buildHash.slice(0, 6);
-		}
+		if (buildHash.length !== 0) packageJson.hash = buildHash.slice(0, 6);
 		packageJson.scripts = void 0;
 		packageJson.main = 'index.htm';
 		packageJson.dependencies = void 0;
@@ -146,7 +142,8 @@ module.exports = {
 			}).code.replace(/[\n]+/gm, '\\n');
 
 		// Get main HTML file
-		const jsHtmlStart = mainHtmlFile.slice(0, mainHtmlFile.indexOf('<!-- APP_SCRIPT_START -->')),
+		const
+			jsHtmlStart = mainHtmlFile.slice(0, mainHtmlFile.indexOf('<!-- APP_SCRIPT_START -->')),
 			jsHtmlEnd = mainHtmlFile.slice((mainHtmlFile.indexOf('<!-- APP_SCRIPT_END -->') + 23));
 		
 		// Process scripts before main module

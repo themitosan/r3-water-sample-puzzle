@@ -50,9 +50,7 @@ export function setInputLockStatus(lockStatus: boolean){
 */ 
 export function setActionFunction(actionName:string, action:Function){
     actionList[actionName as keyof typeof actionList] = function(){
-        if (lockInput === !1){
-            action();
-        }
+        if (lockInput === !1) action();
     };
 }
 
@@ -72,12 +70,8 @@ export function resetActionList(){
     * @param timeout time pressed required to button take action 
 */
 export function setGamepadButtonAction(id: number, actionId: string, timeout: number = 1){
-    if (timeout < 1){
-        timeout = 1;
-    }
-    if (gPadButtons[id] !== void 0){
-        gPadButtons[id] = {rTime: timeout, current: 0, actionId: actionId};
-    }
+    if (timeout < 1) timeout = 1;
+    if (gPadButtons[id] !== void 0) gPadButtons[id] = {rTime: timeout, current: 0, actionId: actionId};
 }
 
 /** 
@@ -91,23 +85,15 @@ export function setGamepadButtonAction(id: number, actionId: string, timeout: nu
 function setGamepadAxesAction(id: number, rangeMin: number, rangeMax:number, actionId: string, timeout: number = 1){
 
     // Fix input
-    if (timeout < 1){
-        timeout = 1;
-    }
-    if (rangeMin < -1){
-        rangeMin = -1;
-    }
-    if (rangeMax > 1){
-        rangeMax = 1;
-    }
+    if (timeout < 1) timeout = 1;
+    if (rangeMin < -1) rangeMin = -1;
+    if (rangeMax > 1) rangeMax = 1;
 
     // Create binding variable
     const newBinding = {id: id, rangeMin: rangeMin, rangeMax: rangeMax, current: 0, rTime: timeout, actionId: actionId};
 
     // Check if current binding exists
-    if (gPadAxesBindings.indexOf(newBinding) === -1){
-        gPadAxesBindings.push(newBinding);
-    }
+    if (gPadAxesBindings.indexOf(newBinding) === -1) gPadAxesBindings.push(newBinding);
 
 }
 
@@ -140,9 +126,7 @@ function handleGamepad(){
                 case !1:
                     if (cButtonReg.current >= cButtonReg.rTime){
                         cButtonReg.current = 0;
-                        if (actionList[cButtonReg.actionId as keyof typeof actionList] !== void 0){
-                            actionList[cButtonReg.actionId as keyof typeof actionList]();
-                        }
+                        if (actionList[cButtonReg.actionId as keyof typeof actionList] !== void 0) actionList[cButtonReg.actionId as keyof typeof actionList]();
                     }
                     break;
 
@@ -164,9 +148,7 @@ function handleGamepad(){
                     var checkList = [cAxe >= cActionData.rangeMin, cAxe <= cActionData.rangeMax];
 
                     // Check if ranges are negative
-                    if (cActionData.rangeMin < 0 && cActionData.rangeMax < 0){
-                        checkList = [cAxe <= cActionData.rangeMin, cAxe >= cActionData.rangeMax];
-                    }
+                    if (cActionData.rangeMin < 0 && cActionData.rangeMax < 0) checkList = [cAxe <= cActionData.rangeMin, cAxe >= cActionData.rangeMax];
 
                     if (checkList.indexOf(!1) === -1){
                         gPadAxesBindings[cActionIndex].current++;
@@ -397,9 +379,7 @@ export function startInput(){
         ];
 
         // Prevent key list
-        if (preventList.indexOf(evt.key) === -1){
-            evt.preventDefault();
-        }
+        if (preventList.indexOf(evt.key) === -1) evt.preventDefault();
 
         // Switch keys
         switch (evt.key){

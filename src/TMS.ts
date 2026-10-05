@@ -41,12 +41,8 @@ function tmsWarn(warnText:string){
 export function getElement(elementId:string){
 	var res:any;
 	res = document.getElementById(elementId);
-	if (res === null){
-		res = document.getElementsByTagName(elementId)[0];
-	}
-	if (res === void 0){
-		res = null;
-	}
+	if (res === null) res = document.getElementsByTagName(elementId)[0];
+	if (res === void 0) res = null;
 	return res;
 }
 
@@ -74,9 +70,7 @@ export function css(elementId:string, cssChanges:object){
 export function focus(elementId:string, sTimeout:number = 0){
 	const elId = getElement(elementId);
 	if (elId !== null){
-		setTimeout(function(){
-			elId.focus();
-		}, sTimeout);
+		setTimeout(elId.focus, sTimeout);
 	} else {
 		tmsWarn(`Unable to focus element because it does not exist! (${elementId})`);
 	}
@@ -88,18 +82,19 @@ export function focus(elementId:string, sTimeout:number = 0){
 	* @param cssAttrName CSS attribute name
 */
 export function getCssData(elementId:string, cssAttrName:any){
+
 	var result = '',
 		elId = getElement(elementId);
+
 	if (elId !== null){
 		result = elId.style[cssAttrName];
+
 		// Get computed style
-		if (result === ''){
-			result = window.getComputedStyle(elId)[cssAttrName];
-		}
+		if (result === '') result = window.getComputedStyle(elId)[cssAttrName];
+
 		// Get from DOM
-		if (result === void 0){
-			result = elId[cssAttrName];
-		}
+		if (result === void 0) result = elId[cssAttrName];
+
 	} else {
 		tmsWarn(`Unable to get element because it does not exist! (${elementId})`);
 	}
@@ -183,12 +178,15 @@ export function triggerClick(elementId:string){
 export function scrollCenter(elementId:string, timeout:number = 0){
 	const elId = getElement(elementId);
 	if (elId !== null){
+
 		var parentDom = elId.parentElement,
 			parentHeight = parentDom.offsetHeight,
 			elHeight = parseFloat(window.getComputedStyle(elId).height.replace('px', ''));
+
 		setTimeout(function(){
 			parentDom.scrollTo(0, (elId.offsetTop - ((parentHeight / 2) - (elHeight / 2))));
 		}, timeout);
+
 	} else {
 		tmsWarn(`Unable to scroll because DOM does not exist! (${elementId})`);
 	}
@@ -238,14 +236,16 @@ export function blur(elementId:string){
 	* @param elementId DOM ID target
 */
 export function getChildCount(elementId:string){
+
 	var res = 0,
 		elId = getElement(elementId);
+
 	if (elId !== null){
+
 		res = document.getElementById(elementId)!.childElementCount;
-		if (res < 0){
-			res = 0;
-		}
+		if (res < 0) res = 0;
 		return res;
+
 	} else {
 		tmsWarn(`Unable to get html collection because DOM does not exist! (${elementId})`);
 	}
@@ -256,14 +256,17 @@ export function getChildCount(elementId:string){
 	* @param elementId DOM ID target
 */
 export function getRect(elementId:string){
+
 	var res,
 		elId = getElement(elementId);
+
 	if (elId !== null){
 		res = elId.getBoundingClientRect();
 	} else {
 		tmsWarn(`Unable to get rect because DOM does not exist! (${elementId})`);
 	}
 	return res;
+
 }
 
 /**

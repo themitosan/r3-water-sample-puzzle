@@ -96,9 +96,9 @@ menuDefaults: Pick<selectMenu, 'mainFocus' | 'id' | 'options' | 'target' | 'sele
     Menu variables
 */
 
-var cursorPos: number = 0,
-    cursorLength: number = 1,
-    cMenuData: any;
+var cMenuData: any,
+    cursorPos: number = 0,
+    cursorLength: number = 1;
 
 /*
     Menu consts
@@ -190,12 +190,8 @@ export function displayMenuOptions(data:selectMenu){
         }
 
         // Fix cursor pos.
-        if (cursorPos < 0){
-            cursorPos = 0;
-        }
-        if (cursorPos > cursorLength){
-            cursorPos = cursorLength;
-        }
+        if (cursorPos < 0) cursorPos = 0;
+        if (cursorPos > cursorLength) cursorPos = cursorLength;
 
         // Update GUI
         cMenuData.options.forEach(function(_cOption:any, cIndex:number){
@@ -223,9 +219,7 @@ export function displayMenuOptions(data:selectMenu){
     // Process options
     cMenuData.options.forEach(function(cOption:any, cIndex:number){
         var indexClass = '';
-        if (cIndex === cMenuData.mainFocus){
-            indexClass = ' DIV_SELECT_OPTION_ACTIVE';
-        }
+        if (cIndex === cMenuData.mainFocus) indexClass = ' DIV_SELECT_OPTION_ACTIVE';
         htmlData = `${htmlData}<div class="DIV_SELECT_OPTION${indexClass}" id="DIV_${cMenuData.id}_${cIndex}">${cOption.label}</div>`;
     });
 

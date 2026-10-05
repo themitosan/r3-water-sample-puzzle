@@ -27,19 +27,13 @@ function rep(str){
 process.argv.forEach(function(cArg){
 
 	// Build platform
-	if (cArg.indexOf('--platform=') !== -1){
-		BUILDER.nwPlatforms = rep(cArg).split(',');
-	}
+	if (cArg.indexOf('--platform=') !== -1) BUILDER.nwPlatforms = rep(cArg).split(',');
 
 	// NW.js version
-	if (cArg.indexOf('--nwVersion=') !== -1){
-		BUILDER.nwVersion = rep(cArg);
-	}
+	if (cArg.indexOf('--nwVersion=') !== -1) BUILDER.nwVersion = rep(cArg);
 
 	// Build flavor
-	if (cArg.indexOf('--flavor=') !== -1){
-		BUILDER.nwFlavor = rep(cArg);
-	}
+	if (cArg.indexOf('--flavor=') !== -1) BUILDER.nwFlavor = rep(cArg);
 
 });
 

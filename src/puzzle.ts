@@ -118,13 +118,8 @@ function getRandPuzzleEndless(){
 function makeRandomCourse(){
 
     while (remainingPuzzles.length < (puzzleList.length - 1)){
-
         var nPuzzle = getRandomPuzzleId();
-
-        if (remainingPuzzles.indexOf(nPuzzle) === -1){
-            remainingPuzzles.push(nPuzzle);
-        }
-
+        if (remainingPuzzles.indexOf(nPuzzle) === -1) remainingPuzzles.push(nPuzzle);
     }
 
     // Set current puzzle
@@ -194,9 +189,7 @@ export function setPuzzleInputActions(){
     setActionFunction('ARROW_RIGHT', function(){updateRow(currentRow, 'right');});
 
     // If is endless mode, add get random puzzle button
-    if (currentGameMode === 'endless'){
-        setActionFunction('ACTION_3', function(){getNewPuzzle(!0, !0);});
-    }
+    if (currentGameMode === 'endless') setActionFunction('ACTION_3', function(){getNewPuzzle(!0, !0);});
 
 }
 
@@ -216,14 +209,10 @@ export function getNewPuzzle(resetScore: boolean = !1, resetSample:boolean = !1)
     }
 
     // Check if needs to reset score
-    if (resetScore === !0){
-        playerData.score = 0;
-    }
+    if (resetScore === !0) playerData.score = 0;
 
     // Check if needs to increase reset sample counter
-    if (resetSample === !0){
-        playerData.resetSample++;
-    }
+    if (resetSample === !0) playerData.resetSample++;
 
     // Update labels
     document.getElementById('LABEL_playerScore')!.innerHTML = playerData.score.toString();
@@ -298,10 +287,7 @@ export function checkPuzzleState(){
         rowState[cRow].forEach(function(cState:boolean, cIndex:number){
 
             var state = 0;
-            if (cState === !0){
-                state = 10;
-            }
-
+            if (cState === !0) state = 10;
             barList[cIndex] = (barList[cIndex] + state);
 
         });
@@ -317,9 +303,7 @@ export function checkPuzzleState(){
     renderResult(finalArray);
 
     // Check if is sample is correct
-    if (finalArray.toString() === currentPuzzle.toString()){
-        playerVictory();
-    }
+    if (finalArray.toString() === currentPuzzle.toString()) playerVictory();
 
 }
 
@@ -346,9 +330,7 @@ export function playerVictory(){
     // If current game mode isn't endless, move to next puzzle
     if (currentGameMode !== 'endless'){
         remainingPuzzles.splice(0, 1);
-        if (remainingPuzzles.length === 0){
-            canGetNewPuzzle = !1;
-        }
+        if (remainingPuzzles.length === 0) canGetNewPuzzle = !1;
     }
 
     // Get next puzzle

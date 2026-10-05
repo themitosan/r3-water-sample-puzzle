@@ -37,9 +37,7 @@ export function renderPuzzle(){
 
             // Get bar state
             var barHeight = 0;
-            if (rowState[cRow][cIndex] === !0){
-                barHeight = 7;
-            }
+            if (rowState[cRow][cIndex] === !0) barHeight = 7;
 
             // Update row and bar state
             TMS.css(`ROW_LINE_${cRow}_BAR_${cIndex}`, {'height': `${barHeight}px`});

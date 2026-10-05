@@ -39,14 +39,10 @@ export function about(){
 export function init(){
 
     // Fix for non nw scenario
-    if (typeof nw !== 'undefined'){
-        manifest = nw.App.manifest;
-    }
+    if (typeof nw !== 'undefined') manifest = nw.App.manifest;
 
     // Fix hash data
-    if (manifest.hash === ''){
-        manifest.hash = 'DIRTY';
-    }
+    if (manifest.hash === '') manifest.hash = 'DIRTY';
 
     // Freeze and seal manifest
     Object.freeze(Object.seal(manifest));
@@ -78,9 +74,7 @@ export function closeGame(){
     fadeOutScreen();
 
     // Close app
-    setTimeout(function(){
-        nw.App.quit();
-    }, 1010);
+    setTimeout(nw.App.quit, 1010);
 
 }
 
